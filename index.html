@@ -3,22 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>GameVault | Premium Game Tracker with Auto-Fill</title>
+    <title>GameVault | Premium Game Tracker</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     
-    <!-- Font Awesome 6 -->
+    <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Chart.js -->
+    <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    
-    <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
         * {
@@ -36,11 +33,15 @@
             --border: #e2e8f0;
             --accent: #8b5cf6;
             --accent-hover: #7c3aed;
+            --accent-glow: rgba(139, 92, 246, 0.4);
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
             --sidebar-bg: #1e1b2e;
-            --shadow: 0 20px 35px -10px rgba(0,0,0,0.08);
+            --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1);
+            --shadow-xl: 0 25px 50px -12px rgba(0,0,0,0.25);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -62,12 +63,16 @@
             overflow-x: hidden;
         }
 
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: var(--border); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-hover); }
 
+        /* Layout */
         .app-container { display: flex; min-height: 100vh; }
         
+        /* Sidebar Premium */
         .sidebar {
             width: 280px;
             background: var(--sidebar-bg);
@@ -192,17 +197,10 @@
             gap: 8px;
             transition: var(--transition);
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--accent-glow); }
         .btn-primary.full { width: 100%; justify-content: center; }
-        .btn-secondary {
-            background: var(--border);
-            border: none;
-            padding: 10px 24px;
-            border-radius: 40px;
-            color: var(--text-primary);
-            cursor: pointer;
-        }
 
+        /* Stats Cards */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -217,18 +215,19 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
             border: 1px solid var(--border);
             transition: var(--transition);
         }
-        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-xl); }
         .stat-card i { font-size: 2.5rem; background: linear-gradient(135deg, var(--accent), #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .stat-card h3 { font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
         .stat-card p { font-size: 2rem; font-weight: 700; margin-top: 5px; }
 
+        /* Charts Premium */
         .charts-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -238,10 +237,13 @@
             border-radius: 28px;
             padding: 1.5rem;
             border: 1px solid var(--border);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
         }
-        .chart-card h4 { text-align: center; margin-top: 1rem; color: var(--text-secondary); }
+        .chart-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .chart-card h4 { text-align: center; margin-top: 1rem; color: var(--text-secondary); font-weight: 600; }
 
+        /* Filter Bar */
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -251,6 +253,7 @@
             padding: 1rem 1.5rem;
             border-radius: 60px;
             border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
         }
         
         .search-box {
@@ -278,83 +281,116 @@
             border-radius: 40px;
             color: var(--text-primary);
             cursor: pointer;
+            transition: var(--transition);
         }
+        select:hover { border-color: var(--accent); }
 
+        /* Games Grid - 2:3 Poster Aspect Ratio */
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 1.8rem;
         }
 
+        /* Game Card Premium */
         .game-card {
             background: var(--card-bg);
-            border-radius: 24px;
+            border-radius: 20px;
             overflow: hidden;
             transition: var(--transition);
             border: 1px solid var(--border);
             cursor: pointer;
+            position: relative;
         }
-        .game-card:hover { transform: translateY(-8px); box-shadow: 0 25px 40px -12px rgba(0,0,0,0.3); border-color: var(--accent); }
         
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--accent);
+        }
+        
+        /* 2:3 Poster Aspect Ratio Container */
         .game-cover {
             position: relative;
-            height: 180px;
+            aspect-ratio: 2 / 3;
             overflow: hidden;
             background: linear-gradient(135deg, #1e1b2e, #2d2a4a);
         }
+        
         .game-cover img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: transform 0.5s ease;
         }
-        .game-card:hover .game-cover img { transform: scale(1.05); }
         
+        .game-card:hover .game-cover img {
+            transform: scale(1.08);
+        }
+        
+        /* Gradient Overlay for better text readability */
+        .cover-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 50%, transparent 100%);
+            pointer-events: none;
+        }
+        
+        /* Progress Bar at Bottom of Cover */
         .progress-overlay {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: rgba(0,0,0,0.5);
+            height: 5px;
+            background: rgba(255,255,255,0.2);
         }
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #10b981, #34d399);
-            transition: width 0.3s;
+            background: linear-gradient(90deg, var(--accent), #a855f7, #ec4899);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .card-content { padding: 1.2rem; }
+        .card-content {
+            padding: 1rem;
+            position: relative;
+        }
         
         .game-title {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 700;
+            margin-bottom: 0.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.5rem;
         }
-        .game-title small { font-size: 0.7rem; color: var(--text-secondary); font-weight: 400; }
+        .game-title small { font-size: 0.65rem; color: var(--text-secondary); font-weight: 400; }
         
+        /* Glowing Stars for Rating 4+ */
         .rating-stars {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
             margin: 8px 0;
         }
-        .rating-stars i { color: #fbbf24; font-size: 0.85rem; }
+        .rating-stars i { font-size: 0.8rem; }
+        .rating-stars i.fas.fa-star { color: #fbbf24; }
+        .rating-stars i.high-rating { filter: drop-shadow(0 0 4px #fbbf24); }
         
         .game-meta {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            margin: 10px 0;
+            margin: 8px 0;
         }
         .tag {
             background: var(--bg-primary);
             padding: 4px 10px;
             border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 500;
             color: var(--accent);
         }
@@ -374,103 +410,196 @@
             color: var(--text-secondary);
             transition: var(--transition);
             padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
         }
-        .card-actions button:hover { color: var(--accent); background: rgba(139, 92, 246, 0.1); }
+        .card-actions button:hover { color: var(--accent); background: rgba(139, 92, 246, 0.1); transform: scale(1.05); }
 
-        /* Search Game Modal */
-        .search-game-section {
-            margin-bottom: 1rem;
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(90deg, var(--border) 25%, var(--bg-primary) 50%, var(--border) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
         }
         
-        .game-search-input {
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .skeleton-cover {
+            aspect-ratio: 2 / 3;
             width: 100%;
-            padding: 14px 18px;
-            border-radius: 50px;
-            border: 2px solid var(--border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 1rem;
+            border-radius: 20px 20px 0 0;
         }
         
+        .skeleton-title {
+            height: 16px;
+            width: 70%;
+            border-radius: 8px;
+            margin: 12px 0 8px;
+        }
+        
+        .skeleton-text {
+            height: 12px;
+            width: 90%;
+            border-radius: 6px;
+            margin: 6px 0;
+        }
+
+        /* Search Dropdown Glassmorphism */
         .search-results {
-            max-height: 300px;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 320px;
             overflow-y: auto;
-            margin-top: 1rem;
+            margin-top: 8px;
             border-radius: 20px;
-            border: 1px solid var(--border);
+            background: rgba(30, 30, 40, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: var(--shadow-xl);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .dark-mode .search-results {
+            background: rgba(15, 23, 42, 0.95);
         }
         
         .search-result-item {
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 12px;
+            padding: 12px 16px;
             cursor: pointer;
             transition: var(--transition);
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
-        .search-result-item:hover {
-            background: var(--accent);
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover, .search-result-item.selected {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
             color: white;
+            transform: translateX(5px);
         }
         
         .search-result-item img {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             object-fit: cover;
             border-radius: 12px;
         }
         
-        .search-result-info h4 {
-            font-size: 1rem;
-            margin-bottom: 4px;
-        }
-        
-        .search-result-info p {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-        
-        .search-result-item:hover .search-result-info p {
-            color: rgba(255,255,255,0.8);
-        }
+        .search-result-info h4 { font-size: 0.95rem; margin-bottom: 4px; }
+        .search-result-info p { font-size: 0.7rem; opacity: 0.8; }
 
+        /* Modals */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(8px);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(12px);
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 2000;
         }
+        
         .modal-content {
             background: var(--bg-secondary);
             border-radius: 32px;
-            max-width: 600px;
+            max-width: 650px;
             width: 90%;
-            padding: 2rem;
-            border: 1px solid var(--border);
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
+            border: 1px solid var(--border);
+            animation: modalFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .modal-header {
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        /* Game Detail Modal - Premium */
+        .detail-hero {
+            position: relative;
+            height: 280px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 32px 32px 0 0;
+        }
+        
+        .detail-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to top, var(--bg-secondary), transparent);
+        }
+        
+        .detail-content {
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .detail-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-meta {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
-        .close-modal {
-            font-size: 2rem;
-            cursor: pointer;
+        
+        .detail-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .detail-description {
+            line-height: 1.6;
+            margin: 1rem 0;
+            color: var(--text-secondary);
+        }
+        
+        .detail-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .detail-link {
+            padding: 10px 20px;
+            border-radius: 40px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            font-size: 0.85rem;
             transition: var(--transition);
         }
-        .close-modal:hover { color: var(--danger); transform: rotate(90deg); }
+        
+        .detail-link:hover { background: var(--accent-hover); transform: translateY(-2px); }
 
         .form-group { margin-bottom: 1rem; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -484,47 +613,22 @@
             color: var(--text-primary);
             transition: var(--transition);
         }
-        input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1); }
+        input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 
         .cover-preview {
             width: 100%;
-            height: 150px;
+            height: 180px;
             object-fit: cover;
-            border-radius: 16px;
+            border-radius: 20px;
             margin-bottom: 1rem;
-        }
-
-        .loading-covers {
-            text-align: center;
-            padding: 3rem;
-            font-size: 1.1rem;
-            color: var(--accent);
-        }
-        .empty-state {
-            text-align: center;
-            padding: 4rem;
-            background: var(--card-bg);
-            border-radius: 28px;
-            color: var(--text-secondary);
+            border: 2px solid var(--accent);
         }
 
         .notification {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            padding: 14px 28px;
-            border-radius: 50px;
-            color: white;
-            font-weight: 500;
             z-index: 10000;
-            animation: slideIn 0.3s ease;
-            display: none;
-        }
-        .notification.success { background: linear-gradient(135deg, #10b981, #059669); }
-        .notification.error { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
         }
 
         .section { display: none; }
@@ -540,7 +644,30 @@
             .main-content { padding: 1rem; }
             .stats-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
             .form-row { grid-template-columns: 1fr; }
-            .filter-bar { border-radius: 20px; }
+            .games-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+            .game-title { font-size: 0.85rem; }
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            background: var(--card-bg);
+            border-radius: 28px;
+            color: var(--text-secondary);
         }
     </style>
 </head>
@@ -591,76 +718,50 @@
     </main>
 </div>
 
-<!-- MODAL ADD/EDIT GAME WITH SEARCH -->
+<!-- ADD/EDIT MODAL -->
 <div id="gameModal" class="modal">
     <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header" style="display:flex; justify-content:space-between; padding:1.5rem 1.5rem 0">
             <h3 id="modalTitle">Add New Game</h3>
-            <span class="close-modal">&times;</span>
+            <span class="close-modal" style="cursor:pointer; font-size:2rem">&times;</span>
         </div>
-        
-        <!-- Search Game from API -->
-        <div class="search-game-section">
-            <label>🔍 Search Game (Auto-fill from RAWG)</label>
-            <input type="text" id="gameSearchInput" class="game-search-input" placeholder="Type game name... e.g., The Witcher, Elden Ring">
-            <div id="searchResults" class="search-results" style="display:none;"></div>
+        <div style="padding:1.5rem">
+            <div style="position:relative; margin-bottom:1rem">
+                <input type="text" id="gameSearchInput" class="game-search-input" placeholder="🔍 Search game from RAWG... (auto-fill)">
+                <div id="searchResults" class="search-results"></div>
+            </div>
+            <div style="text-align:center; margin:10px 0">— OR —</div>
+            <form id="gameForm">
+                <input type="hidden" id="gameId">
+                <div class="form-group"><label>Game Title *</label><input type="text" id="title" required></div>
+                <div id="coverPreviewContainer" style="display:none;"><img id="coverPreview" class="cover-preview" src=""></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Platform</label><input type="text" id="platform"></div>
+                    <div class="form-group"><label>Genre</label><input type="text" id="genre"></div>
+                </div>
+                <div class="form-group"><label>Tags (comma)</label><input type="text" id="tags"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Progress (%)</label><input type="number" id="progress" min="0" max="100" value="0"></div>
+                    <div class="form-group"><label>Rating (1-5)</label><input type="number" id="rating" step="0.5" min="1" max="5" value="3"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Hours Played</label><input type="number" id="hours_played" step="0.5" value="0"></div>
+                    <div class="form-group"><label>Status</label><select id="status"><option value="backlog">📚 Backlog</option><option value="playing">🎮 Playing</option><option value="completed">🏆 Completed</option></select></div>
+                </div>
+                <button type="submit" class="btn-primary full">💾 Save Game</button>
+            </form>
         </div>
-        
-        <div style="text-align: center; margin: 10px 0;">— OR —</div>
-        
-        <form id="gameForm">
-            <input type="hidden" id="gameId">
-            <div class="form-group">
-                <label>Game Title *</label>
-                <input type="text" id="title" required placeholder="e.g., The Witcher 3">
-            </div>
-            
-            <!-- Cover Preview -->
-            <div id="coverPreviewContainer" style="display:none;">
-                <label>Cover Art</label>
-                <img id="coverPreview" class="cover-preview" src="" alt="Game cover">
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Platform</label>
-                    <input type="text" id="platform" placeholder="PC, PS5, Switch">
-                </div>
-                <div class="form-group">
-                    <label>Genre</label>
-                    <input type="text" id="genre" placeholder="RPG, Action">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Tags (comma)</label>
-                <input type="text" id="tags" placeholder="open-world, story-rich">
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Progress (%)</label>
-                    <input type="number" id="progress" min="0" max="100" value="0">
-                </div>
-                <div class="form-group">
-                    <label>Rating (1-5)</label>
-                    <input type="number" id="rating" step="0.5" min="1" max="5" value="3">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Hours Played</label>
-                    <input type="number" id="hours_played" step="0.5" value="0">
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select id="status">
-                        <option value="backlog">📚 Backlog</option>
-                        <option value="playing">🎮 Playing</option>
-                        <option value="completed">🏆 Completed</option>
-                    </select>
-                </div>
-            </div>
-            <button type="submit" class="btn-primary full">💾 Save Game</button>
-        </form>
+    </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div id="detailModal" class="modal">
+    <div class="modal-content" style="max-width:750px; padding:0; overflow:hidden">
+        <div style="position:relative">
+            <div id="detailHero" class="detail-hero"></div>
+            <span class="close-modal" style="position:absolute; top:20px; right:20px; cursor:pointer; background:rgba(0,0,0,0.5); width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%; color:white; font-size:1.5rem">&times;</span>
+        </div>
+        <div id="detailContent" class="detail-content"></div>
     </div>
 </div>
 
@@ -677,11 +778,9 @@
 </div>
 
 <script>
-    // Environment Variables
     window.SUPABASE_URL = 'https://inwjlxiqxtztjtrttqke.supabase.co';
     window.SUPABASE_KEY = 'sb_publishable_ntFp5P_qMnQKQSv3-MX9RA_dgOit_H1';
     window.RAWG_API_KEY = 'acb03a4a2dd04337b6b62eb78e325c59';
-    console.log('✅ Environment variables loaded');
 </script>
 <script src="script.js"></script>
 </body>
