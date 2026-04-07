@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>GameVault | Epic-Style Game Tracker</title>
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <!-- PWA Manifest (embedded) -->
+    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22GameVault%20-%20Game%20Tracker%22,%22short_name%22:%22GameVault%22,%22description%22:%22Track%20your%20gaming%20journey%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22theme_color%22:%22#0078f0%22,%22background_color%22:%220a0a0a%22,%22icons%22:[{%22src%22:%22https://placehold.co/192x192/0078f0/white?text=G%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22},{%22src%22:%22https://placehold.co/512x512/0078f0/white?text=G%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}]}">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     
     <!-- Fonts & Icons -->
@@ -58,13 +58,11 @@
             transition: all 0.3s ease;
         }
 
-        /* Layout Utama */
         .app-container {
             display: flex;
             min-height: 100vh;
         }
 
-        /* Sidebar Desktop - Epic Style */
         .sidebar {
             width: 260px;
             background: var(--sidebar-bg);
@@ -120,7 +118,6 @@
             color: white;
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: 260px;
@@ -128,7 +125,6 @@
             min-height: 100vh;
         }
 
-        /* Bottom Navigation (Mobile) */
         .bottom-nav {
             display: none;
             position: fixed;
@@ -167,7 +163,6 @@
             margin-top: -20px;
         }
 
-        /* Header */
         .content-header {
             display: flex;
             justify-content: space-between;
@@ -186,7 +181,6 @@
             color: transparent;
         }
 
-        /* Buttons - Epic Style */
         .btn-primary {
             background: var(--accent);
             border: none;
@@ -206,7 +200,6 @@
             transform: translateY(-2px);
         }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -235,7 +228,6 @@
             color: var(--accent);
         }
 
-        /* Charts */
         .charts-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -250,7 +242,6 @@
             border: 1px solid var(--border);
         }
 
-        /* Filter Bar - Epic Style */
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -290,14 +281,12 @@
             cursor: pointer;
         }
 
-        /* Games Grid - Epic Style (Responsive Grid seperti Epic Store) */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
         }
 
-        /* Game Card - Epic Style */
         .game-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -329,7 +318,6 @@
             transform: scale(1.05);
         }
 
-        /* Badge Gratis/Free Epic Style */
         .free-badge {
             position: absolute;
             top: 12px;
@@ -417,7 +405,6 @@
             background: rgba(0, 120, 240, 0.1);
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -460,7 +447,6 @@
             color: var(--accent);
         }
 
-        /* Forms */
         .form-group {
             margin-bottom: 1rem;
         }
@@ -494,7 +480,6 @@
             border-color: var(--accent);
         }
 
-        /* Dark Mode Toggle */
         .dark-mode-toggle {
             display: flex;
             align-items: center;
@@ -551,7 +536,6 @@
             transform: translateX(26px);
         }
 
-        /* Search Results */
         .search-results {
             position: absolute;
             top: 100%;
@@ -588,7 +572,6 @@
             border-radius: 12px;
         }
 
-        /* Section Toggle */
         .section {
             display: none;
         }
@@ -597,7 +580,6 @@
             display: block;
         }
 
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 4rem;
@@ -605,7 +587,6 @@
             border-radius: 28px;
         }
 
-        /* Notification */
         .notification {
             position: fixed;
             bottom: 30px;
@@ -637,7 +618,6 @@
             background: linear-gradient(135deg, #ef4444, #dc2626);
         }
 
-        /* Cover Preview */
         .cover-preview {
             width: 100%;
             height: 150px;
@@ -646,7 +626,6 @@
             margin-bottom: 1rem;
         }
 
-        /* Responsive Mobile */
         @media (max-width: 768px) {
             .sidebar {
                 display: none;
@@ -704,7 +683,6 @@
             }
         }
 
-        /* Scrollbar Styling */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -726,7 +704,6 @@
 </head>
 <body>
 <div class="app-container">
-    <!-- Desktop Sidebar -->
     <aside class="sidebar">
         <div class="logo-area">
             <i class="fas fa-dice-d6"></i>
@@ -752,7 +729,6 @@
         </div>
     </aside>
 
-    <!-- Mobile Bottom Navigation -->
     <div class="bottom-nav">
         <button class="nav-item active" data-tab="dashboard">
             <i class="fas fa-chart-pie"></i>
@@ -768,7 +744,6 @@
         </button>
     </div>
 
-    <!-- Main Content -->
     <main class="main-content">
         <header class="content-header">
             <h1 id="pageTitle">Dashboard</h1>
@@ -777,7 +752,6 @@
             </button>
         </header>
 
-        <!-- Dashboard Section -->
         <section id="dashboardSection" class="section active">
             <div class="stats-grid">
                 <div class="stat-card">
@@ -825,7 +799,6 @@
             </div>
         </section>
 
-        <!-- Library Section -->
         <section id="librarySection" class="section">
             <div class="filter-bar">
                 <div class="search-box">
@@ -861,7 +834,6 @@
     </main>
 </div>
 
-<!-- Add/Edit Modal -->
 <div id="gameModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -925,7 +897,6 @@
     </div>
 </div>
 
-<!-- Delete Modal -->
 <div id="deleteModal" class="modal">
     <div class="modal-content" style="max-width: 400px;">
         <h3>🗑️ Confirm Delete</h3>
@@ -938,12 +909,526 @@
 </div>
 
 <script>
-    // Environment Variables
-    window.SUPABASE_URL = 'https://inwjlxiqxtztjtrttqke.supabase.co';
-    window.SUPABASE_KEY = 'sb_publishable_ntFp5P_qMnQKQSv3-MX9RA_dgOit_H1';
-    window.RAWG_API_KEY = 'acb03a4a2dd04337b6b62eb78e325c59';
-    console.log('✅ Environment loaded');
+    // ============================================
+    // GAME TRACKER - ALL-IN-ONE VERSION
+    // ============================================
+
+    // Configuration
+    const SUPABASE_URL = 'https://inwjlxiqxtztjtrttqke.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_ntFp5P_qMnQKQSv3-MX9RA_dgOit_H1';
+    const RAWG_API_KEY = 'acb03a4a2dd04337b6b62eb78e325c59';
+
+    // Initialize Supabase
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // State
+    let gamesData = [];
+    let genreChart, completionChart, ratingChart;
+    let currentCoverUrl = null;
+    let deleteId = null;
+
+    // Helper Functions
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            return m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;';
+        });
+    }
+
+    function renderStars(rating) {
+        let stars = '';
+        const fullStars = Math.floor(rating);
+        const hasHalfStar = rating % 1 !== 0;
+        
+        for (let i = 1; i <= 5; i++) {
+            if (i <= fullStars) {
+                stars += '<i class="fas fa-star"></i>';
+            } else if (hasHalfStar && i === fullStars + 1) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            } else {
+                stars += '<i class="far fa-star"></i>';
+            }
+        }
+        return stars;
+    }
+
+    function showNotification(message, type) {
+        let notification = document.getElementById('notification');
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.id = 'notification';
+            document.body.appendChild(notification);
+        }
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
+
+    // RAWG API Functions
+    async function searchGamesFromAPI(query) {
+        if (!query || query.length < 2) return [];
+        try {
+            const url = `https://api.rawg.io/api/games?search=${encodeURIComponent(query)}&key=${RAWG_API_KEY}&page_size=8`;
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.results?.map(game => ({
+                id: game.id,
+                name: game.name,
+                cover: game.background_image,
+                genres: game.genres?.map(g => g.name).join(', ') || '',
+                platforms: game.platforms?.map(p => p.platform.name).slice(0, 2).join(', ') || '',
+                rating: game.rating || 0
+            })) || [];
+        } catch (error) {
+            console.error('Search error:', error);
+            return [];
+        }
+    }
+
+    // Render Functions
+    function renderLibrary() {
+        const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
+        const genreFilter = document.getElementById('filterGenre')?.value || '';
+        const platformFilter = document.getElementById('filterPlatform')?.value || '';
+        const ratingFilter = document.getElementById('filterRating')?.value || '';
+        const statusFilter = document.getElementById('filterStatus')?.value || '';
+
+        let filtered = gamesData.filter(g => g.title?.toLowerCase().includes(search));
+        
+        if (genreFilter) filtered = filtered.filter(g => g.genre === genreFilter);
+        if (platformFilter) filtered = filtered.filter(g => g.platform === platformFilter);
+        if (ratingFilter) filtered = filtered.filter(g => g.rating >= parseInt(ratingFilter));
+        if (statusFilter) filtered = filtered.filter(g => g.status === statusFilter);
+
+        const grid = document.getElementById('gamesGrid');
+        if (!grid) return;
+        
+        if (!filtered.length) {
+            grid.innerHTML = `<div class="empty-state"><i class="fas fa-gamepad" style="font-size:3rem; margin-bottom:1rem"></i><p>No games found. Add your first game!</p></div>`;
+            return;
+        }
+        
+        grid.innerHTML = filtered.map(game => `
+            <div class="game-card" data-id="${game.id}">
+                <div class="game-cover">
+                    <img src="${game.cover_url || 'https://placehold.co/400x200/1e1b2e/0078f0?text=' + encodeURIComponent(game.title.substring(0,1))}" 
+                         alt="${escapeHtml(game.title)}" loading="lazy"
+                         onerror="this.src='https://placehold.co/400x200/1e1b2e/0078f0?text=${encodeURIComponent(game.title.substring(0,2))}'">
+                    <div class="free-badge"><i class="fas fa-download"></i> ${game.status === 'completed' ? 'COMPLETED' : 'PLAY NOW'}</div>
+                    <div class="progress-overlay">
+                        <div class="progress-fill" style="width:${game.progress || 0}%"></div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="game-title">
+                        ${escapeHtml(game.title)}
+                        <small>${escapeHtml(game.platform) || '-'}</small>
+                    </div>
+                    <div class="rating-stars">
+                        ${renderStars(game.rating || 0)} 
+                        <span style="font-size:0.7rem">⏱️ ${game.hours_played || 0}h</span>
+                    </div>
+                    <div class="game-meta">
+                        <span class="tag">${escapeHtml(game.genre) || 'General'}</span>
+                        ${game.tags ? game.tags.split(',').slice(0,2).map(t => `<span class="tag">#${escapeHtml(t.trim())}</span>`).join('') : ''}
+                    </div>
+                    <div class="card-actions">
+                        <button class="edit-game" data-id="${game.id}"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="delete-game" data-id="${game.id}"><i class="fas fa-trash-alt"></i> Delete</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.edit-game').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openEditModal(btn.dataset.id);
+            });
+        });
+        
+        document.querySelectorAll('.delete-game').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteId = btn.dataset.id;
+                document.getElementById('deleteModal').style.display = 'flex';
+            });
+        });
+    }
+
+    function updateDashboard() {
+        const total = gamesData.length;
+        const completed = gamesData.filter(g => g.status === 'completed').length;
+        const totalHours = gamesData.reduce((sum, g) => sum + (g.hours_played || 0), 0);
+        const avgRating = total > 0 ? (gamesData.reduce((sum, g) => sum + (g.rating || 0), 0) / total).toFixed(1) : 0;
+        
+        document.getElementById('totalGames').innerText = total;
+        document.getElementById('completedGames').innerText = completed;
+        document.getElementById('totalHours').innerText = totalHours;
+        document.getElementById('avgRating').innerText = avgRating;
+        
+        updateCharts();
+    }
+
+    function updateCharts() {
+        const genreCount = {};
+        gamesData.forEach(g => {
+            if (g.genre) genreCount[g.genre] = (genreCount[g.genre] || 0) + 1;
+        });
+        const topGenres = Object.entries(genreCount).sort((a, b) => b[1] - a[1]).slice(0, 5);
+        
+        const genreCtx = document.getElementById('genreChart')?.getContext('2d');
+        if (genreCtx) {
+            if (genreChart) genreChart.destroy();
+            genreChart = new Chart(genreCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: topGenres.map(g => g[0]),
+                    datasets: [{
+                        data: topGenres.map(g => g[1]),
+                        backgroundColor: ['#0078f0', '#ec4899', '#06b6d4', '#f97316', '#10b981']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } } }
+            });
+        }
+        
+        const completionCtx = document.getElementById('completionChart')?.getContext('2d');
+        if (completionCtx) {
+            const completionData = [
+                gamesData.filter(g => g.status === 'completed').length,
+                gamesData.filter(g => g.status === 'playing').length,
+                gamesData.filter(g => g.status === 'backlog').length
+            ];
+            if (completionChart) completionChart.destroy();
+            completionChart = new Chart(completionCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Completed', 'Playing', 'Backlog'],
+                    datasets: [{ label: 'Games', data: completionData, backgroundColor: '#0078f0', borderRadius: 10 }]
+                },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: '#fff' } }, x: { ticks: { color: '#fff' } } } }
+            });
+        }
+        
+        const ratingCtx = document.getElementById('ratingChart')?.getContext('2d');
+        if (ratingCtx) {
+            const ratingDist = [0, 0, 0, 0, 0];
+            gamesData.forEach(g => {
+                if (g.rating >= 1 && g.rating <= 5) ratingDist[Math.floor(g.rating) - 1]++;
+            });
+            if (ratingChart) ratingChart.destroy();
+            ratingChart = new Chart(ratingCtx, {
+                type: 'line',
+                data: {
+                    labels: ['★1', '★2', '★3', '★4', '★5'],
+                    datasets: [{ label: 'Games', data: ratingDist, borderColor: '#f59e0b', tension: 0.3, fill: true, backgroundColor: 'rgba(245,158,11,0.1)' }]
+                },
+                options: { responsive: true, maintainAspectRatio: true, scales: { y: { ticks: { color: '#fff' } }, x: { ticks: { color: '#fff' } } } }
+            });
+        }
+    }
+
+    function updateFilters() {
+        const genres = [...new Set(gamesData.map(g => g.genre).filter(Boolean))];
+        const platforms = [...new Set(gamesData.map(g => g.platform).filter(Boolean))];
+        
+        const genreSelect = document.getElementById('filterGenre');
+        const platformSelect = document.getElementById('filterPlatform');
+        
+        if (genreSelect) {
+            genreSelect.innerHTML = '<option value="">All Genres</option>' + genres.map(g => `<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`).join('');
+        }
+        if (platformSelect) {
+            platformSelect.innerHTML = '<option value="">All Platforms</option>' + platforms.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+        }
+    }
+
+    // CRUD Functions
+    async function fetchGames() {
+        try {
+            const { data, error } = await supabaseClient.from('games').select('*').order('created_at', { ascending: false });
+            if (error) throw error;
+            gamesData = data || [];
+            console.log(`Loaded ${gamesData.length} games`);
+            renderLibrary();
+            updateDashboard();
+            updateFilters();
+        } catch (error) {
+            console.error('Error fetching games:', error);
+            showNotification('Failed to load games', 'error');
+        }
+    }
+
+    async function saveGame(event) {
+        event.preventDefault();
+        
+        const id = document.getElementById('gameId')?.value;
+        const game = {
+            title: document.getElementById('title')?.value,
+            platform: document.getElementById('platform')?.value || null,
+            genre: document.getElementById('genre')?.value || null,
+            tags: document.getElementById('tags')?.value || null,
+            progress: parseInt(document.getElementById('progress')?.value || 0),
+            rating: parseFloat(document.getElementById('rating')?.value || 3),
+            hours_played: parseFloat(document.getElementById('hours_played')?.value || 0),
+            status: document.getElementById('status')?.value,
+            cover_url: currentCoverUrl || null,
+            updated_at: new Date().toISOString()
+        };
+        
+        if (!game.title) {
+            showNotification('Title is required!', 'error');
+            return;
+        }
+        
+        try {
+            if (id) {
+                await supabaseClient.from('games').update(game).eq('id', id);
+                showNotification('Game updated!', 'success');
+            } else {
+                await supabaseClient.from('games').insert([{ ...game, created_at: new Date().toISOString() }]);
+                showNotification('Game added!', 'success');
+            }
+            closeModal();
+            fetchGames();
+        } catch (error) {
+            console.error('Error saving game:', error);
+            showNotification('Failed to save game', 'error');
+        }
+    }
+
+    async function deleteGame() {
+        if (!deleteId) return;
+        try {
+            await supabaseClient.from('games').delete().eq('id', deleteId);
+            showNotification('Game deleted!', 'success');
+            fetchGames();
+            closeDeleteModal();
+        } catch (error) {
+            showNotification('Failed to delete', 'error');
+        }
+    }
+
+    // Modal Functions
+    function openEditModal(id) {
+        const game = gamesData.find(g => g.id == id);
+        if (game) {
+            document.getElementById('modalTitle').innerText = 'Edit Game';
+            document.getElementById('gameId').value = game.id;
+            document.getElementById('title').value = game.title;
+            document.getElementById('platform').value = game.platform || '';
+            document.getElementById('genre').value = game.genre || '';
+            document.getElementById('tags').value = game.tags || '';
+            document.getElementById('progress').value = game.progress;
+            document.getElementById('rating').value = game.rating;
+            document.getElementById('hours_played').value = game.hours_played || 0;
+            document.getElementById('status').value = game.status;
+            currentCoverUrl = game.cover_url;
+            
+            if (currentCoverUrl) {
+                document.getElementById('coverPreview').src = currentCoverUrl;
+                document.getElementById('coverPreviewContainer').style.display = 'block';
+            }
+            document.getElementById('gameModal').style.display = 'flex';
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('gameModal').style.display = 'none';
+        document.getElementById('gameForm').reset();
+        document.getElementById('gameId').value = '';
+        document.getElementById('coverPreviewContainer').style.display = 'none';
+        document.getElementById('searchResults').style.display = 'none';
+        document.getElementById('gameSearchInput').value = '';
+        currentCoverUrl = null;
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+        deleteId = null;
+    }
+
+    // Search Auto-fill
+    let searchTimeout = null;
+
+    function setupGameSearch() {
+        const searchInput = document.getElementById('gameSearchInput');
+        const resultsDiv = document.getElementById('searchResults');
+        
+        if (!searchInput) return;
+        
+        searchInput.addEventListener('input', async (e) => {
+            const query = e.target.value.trim();
+            if (searchTimeout) clearTimeout(searchTimeout);
+            
+            if (query.length < 2) {
+                resultsDiv.style.display = 'none';
+                return;
+            }
+            
+            searchTimeout = setTimeout(async () => {
+                resultsDiv.innerHTML = '<div style="padding: 1rem; text-align: center;"><i class="fas fa-spinner fa-pulse"></i> Searching...</div>';
+                resultsDiv.style.display = 'block';
+                
+                const results = await searchGamesFromAPI(query);
+                
+                if (!results.length) {
+                    resultsDiv.innerHTML = '<div style="padding: 1rem; text-align: center;">No games found</div>';
+                    return;
+                }
+                
+                resultsDiv.innerHTML = results.map(game => `
+                    <div class="search-result-item" data-game='${JSON.stringify(game)}'>
+                        <img src="${game.cover || 'https://placehold.co/50x50/0078f0/white?text=?'}" alt="${escapeHtml(game.name)}">
+                        <div>
+                            <h4>${escapeHtml(game.name)}</h4>
+                            <p>${game.genres || 'No genre'} | ⭐ ${game.rating}</p>
+                        </div>
+                    </div>
+                `).join('');
+                
+                document.querySelectorAll('.search-result-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const gameData = JSON.parse(item.dataset.game);
+                        autoFillForm(gameData);
+                        resultsDiv.style.display = 'none';
+                        searchInput.value = '';
+                    });
+                });
+            }, 500);
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !resultsDiv.contains(e.target)) {
+                resultsDiv.style.display = 'none';
+            }
+        });
+    }
+
+    function autoFillForm(gameData) {
+        document.getElementById('title').value = gameData.name;
+        if (gameData.platforms) {
+            document.getElementById('platform').value = gameData.platforms.split(',')[0].trim();
+        }
+        if (gameData.genres) {
+            document.getElementById('genre').value = gameData.genres;
+            const tags = gameData.genres.split(',').map(g => g.trim().toLowerCase());
+            document.getElementById('tags').value = tags.join(', ');
+        }
+        if (gameData.rating) {
+            const rounded = Math.round(gameData.rating * 2) / 2;
+            document.getElementById('rating').value = Math.min(5, Math.max(1, rounded));
+        }
+        if (gameData.cover) {
+            currentCoverUrl = gameData.cover;
+            document.getElementById('coverPreview').src = gameData.cover;
+            document.getElementById('coverPreviewContainer').style.display = 'block';
+        }
+        showNotification(`Game "${gameData.name}" auto-filled!`, 'success');
+    }
+
+    // Tab Navigation
+    function switchTab(tab) {
+        document.querySelectorAll('.nav-link, .nav-item').forEach(el => {
+            el.classList.remove('active');
+        });
+        document.querySelectorAll(`[data-tab="${tab}"]`).forEach(el => {
+            el.classList.add('active');
+        });
+        
+        document.getElementById('dashboardSection').classList.toggle('active', tab === 'dashboard');
+        document.getElementById('librarySection').classList.toggle('active', tab === 'library');
+        document.getElementById('pageTitle').innerText = tab === 'dashboard' ? 'Dashboard' : 'Game Library';
+        
+        if (tab === 'library') renderLibrary();
+    }
+
+    // Dark Mode
+    function setupDarkMode() {
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        if (darkModeToggle) {
+            const saved = localStorage.getItem('darkMode') === 'true';
+            darkModeToggle.checked = saved;
+            if (saved) document.body.classList.add('dark-mode');
+            darkModeToggle.addEventListener('change', () => {
+                document.body.classList.toggle('dark-mode', darkModeToggle.checked);
+                localStorage.setItem('darkMode', darkModeToggle.checked);
+                updateCharts();
+            });
+        }
+    }
+
+    // Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('🚀 Game Tracker Starting...');
+        
+        setupGameSearch();
+        setupDarkMode();
+        
+        // Tab switching
+        document.querySelectorAll('.nav-link, .nav-item').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTab(el.dataset.tab);
+            });
+        });
+        
+        // Add game buttons
+        document.getElementById('addGameBtn').addEventListener('click', () => {
+            document.getElementById('modalTitle').innerText = 'Add New Game';
+            document.getElementById('gameForm').reset();
+            document.getElementById('gameId').value = '';
+            document.getElementById('progress').value = 0;
+            document.getElementById('rating').value = 3;
+            document.getElementById('hours_played').value = 0;
+            document.getElementById('status').value = 'backlog';
+            document.getElementById('coverPreviewContainer').style.display = 'none';
+            currentCoverUrl = null;
+            document.getElementById('gameModal').style.display = 'flex';
+        });
+        
+        document.getElementById('mobileAddBtn')?.addEventListener('click', () => {
+            document.getElementById('addGameBtn').click();
+        });
+        
+        // Close modals
+        document.querySelectorAll('.close-modal, .modal').forEach(el => {
+            el.addEventListener('click', function(e) {
+                if (e.target === this || e.target.classList.contains('close-modal')) {
+                    closeModal();
+                    closeDeleteModal();
+                }
+            });
+        });
+        
+        // Delete buttons
+        document.getElementById('confirmDeleteBtn').addEventListener('click', deleteGame);
+        document.getElementById('cancelDeleteBtn').addEventListener('click', closeDeleteModal);
+        
+        // Save form
+        document.getElementById('gameForm').addEventListener('submit', saveGame);
+        
+        // Filters
+        document.getElementById('searchInput').addEventListener('input', () => renderLibrary());
+        document.getElementById('filterGenre').addEventListener('change', renderLibrary);
+        document.getElementById('filterPlatform').addEventListener('change', renderLibrary);
+        document.getElementById('filterRating').addEventListener('change', renderLibrary);
+        document.getElementById('filterStatus').addEventListener('change', renderLibrary);
+        
+        // Initial fetch
+        fetchGames();
+        
+        // Realtime subscription
+        supabaseClient.channel('games-channel')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'games' }, () => fetchGames())
+            .subscribe();
+        
+        console.log('✅ App Ready');
+    });
 </script>
-<script src="script.js"></script>
 </body>
 </html>
