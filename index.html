@@ -1,583 +1,690 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <meta name="theme-color" content="#3b82f6">
-    <title>GameVault | Game Tracker</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>GameVault · Grid Library</title>
     <style>
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #121212;
-            --surface: #1e1e1e;
-            --surface-hover: #252525;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --text-muted: #6b6b6b;
-            --border: rgba(255, 255, 255, 0.08);
-            --accent: #3b82f6;
-            --accent-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            --accent-glow: rgba(59, 130, 246, 0.3);
-            --glass-bg: rgba(18, 18, 18, 0.85);
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); overflow-x: hidden; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-secondary); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-        
-        /* Layout */
-        .app-container { display: flex; min-height: 100vh; }
-        .sidebar {
-            width: 280px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            padding: 2rem 1.5rem;
+
+        body {
+            background: linear-gradient(145deg, #0b0e18 0%, #10131f 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: #eef2ff;
+            padding: 2rem 1.8rem;
+        }
+
+        /* main container — grid-based layout with right-side emphasis */
+        .app-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* ========= HEADER / SIDEBAR-LIKE MENU ========= */
+        .gamevault-header {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logo-area h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d9e2ff, #a87eff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .logo-area p {
+            font-size: 0.75rem;
+            color: #7f8ea3;
+            margin-top: 4px;
+        }
+
+        .nav-menu {
+            display: flex;
             gap: 2rem;
-            border-right: 1px solid var(--border);
-            position: fixed;
-            top: 0; left: 0; bottom: 0;
-            z-index: 20;
-        }
-        .logo-icon {
-            width: 44px; height: 44px;
-            background: var(--accent-gradient);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-        .logo-icon i { font-size: 1.6rem; color: white; }
-        .logo-text { font-size: 1.4rem; font-weight: 800; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .logo-area { display: flex; align-items: center; gap: 12px; }
-        .nav-menu { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 12px 16px;
-            border-radius: 14px;
-            color: var(--text-secondary);
-            transition: var(--transition);
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .nav-link:hover { color: white; background: rgba(59, 130, 246, 0.1); transform: translateX(5px); }
-        .nav-link.active { background: rgba(59, 130, 246, 0.15); color: var(--accent); border-left: 3px solid var(--accent); }
-        
-        /* Dark Mode Toggle */
-        .dark-mode-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.75rem 1rem;
-            background: rgba(255,255,255,0.03);
-            border-radius: 40px;
-        }
-        .switch { position: relative; display: inline-block; width: 52px; height: 26px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #2a2a2a; border-radius: 34px; transition: 0.3s;
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 20px; width: 20px;
-            left: 3px; bottom: 3px; background-color: white; border-radius: 50%; transition: 0.3s;
-        }
-        input:checked + .slider { background: var(--accent-gradient); }
-        input:checked + .slider:before { transform: translateX(26px); }
-        
-        /* Main Content */
-        .main-content { flex: 1; margin-left: 280px; min-height: 100vh; }
-        .sticky-header {
-            position: sticky; top: 0; z-index: 15;
-            background: rgba(10, 10, 10, 0.7);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-        }
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-        .content-header h1 { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, var(--text-primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        
-        .btn-primary {
-            background: var(--accent-gradient);
-            border: none;
-            padding: 12px 28px;
-            border-radius: 40px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px var(--accent-glow);
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--accent-glow); }
-        
-        /* CONTAINER FULL WIDTH */
-        .container {
-            width: 100%;
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .stat-card {
-            background: var(--surface);
-            padding: 1.5rem;
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            border: 1px solid var(--border);
-            transition: var(--transition);
-        }
-        .stat-card:hover { transform: translateY(-4px); background: var(--surface-hover); border-color: var(--accent); }
-        .stat-card i { font-size: 2rem; background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .stat-card h3 { font-size: 0.7rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .stat-card p { font-size: 1.8rem; font-weight: 800; }
-        
-        /* Charts */
-        .charts-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .chart-card {
-            background: var(--surface);
-            border-radius: 24px;
-            padding: 1.5rem;
-            border: 1px solid var(--border);
-        }
-        .chart-card h4 { text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem; }
-        
-        /* FILTER BAR - FULL WIDTH */
-        .filter-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 2rem;
-            background: var(--surface);
-            padding: 1rem 1.5rem;
+            background: rgba(18, 22, 35, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem 1.2rem;
             border-radius: 60px;
-            border: 1px solid var(--border);
-            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
+
+        .nav-menu span {
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: default;
+            transition: 0.2s;
+            color: #b9c3db;
+        }
+
+        .nav-menu span:first-child {
+            color: white;
+            border-bottom: 2px solid #a87eff;
+            padding-bottom: 4px;
+        }
+
+        /* ========= FILTER & SEARCH SECTION ========= */
+        .controls-panel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2.2rem;
+            background: rgba(12, 16, 28, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 1rem 1.6rem;
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
         .search-box {
             flex: 2;
-            min-width: 200px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--bg-secondary);
-            padding: 8px 18px;
-            border-radius: 40px;
-            border: 1px solid var(--border);
+            min-width: 220px;
         }
+
         .search-box input {
-            flex: 1;
-            background: none;
-            border: none;
-            outline: none;
-            color: var(--text-primary);
-        }
-        select {
-            flex: 1;
-            min-width: 120px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            padding: 8px 20px;
-            border-radius: 40px;
-            color: var(--text-primary);
-            cursor: pointer;
-        }
-        
-        /* GAMES GRID - LEBAR PENUH */
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 1.8rem;
             width: 100%;
-        }
-        
-        /* Game Card */
-        .game-card {
-            background: var(--surface);
-            border-radius: 20px;
-            overflow: hidden;
-            transition: var(--transition);
-            border: 1px solid var(--border);
-            cursor: pointer;
-        }
-        .game-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-xl);
-            border-color: var(--accent);
-        }
-        .game-cover {
-            position: relative;
-            aspect-ratio: 3 / 4;
-            overflow: hidden;
-        }
-        .game-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        .game-card:hover .game-cover img { transform: scale(1.08); }
-        .cover-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 60%;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.5), transparent);
-        }
-        .progress-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: rgba(255,255,255,0.1);
-        }
-        .progress-fill {
-            height: 100%;
-            background: var(--accent-gradient);
-            transition: width 0.5s ease;
-        }
-        .card-content { padding: 1rem; }
-        .game-title {
+            background: #0f121f;
+            border: 1px solid #282e3f;
+            border-radius: 60px;
+            padding: 0.75rem 1.3rem;
             font-size: 0.9rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            color: #f0f3ff;
+            transition: all 0.2s;
+            font-family: inherit;
         }
-        .game-title small { font-size: 0.65rem; font-weight: 400; color: var(--text-muted); }
-        
-        .status-badge {
-            display: inline-flex;
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #a87eff;
+            box-shadow: 0 0 0 2px rgba(168, 126, 255, 0.2);
+        }
+
+        .search-box input::placeholder {
+            color: #5b677d;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
             align-items: center;
-            gap: 4px;
-            padding: 4px 10px;
-            border-radius: 30px;
-            font-size: 0.6rem;
-            font-weight: 600;
-            margin-bottom: 8px;
         }
-        .status-badge.playing { background: rgba(59,130,246,0.15); color: #3b82f6; }
-        .status-badge.backlog { background: rgba(245,158,11,0.15); color: #f59e0b; }
-        .status-badge.completed { background: rgba(16,185,129,0.15); color: #10b981; }
+
+        .filter-group select {
+            background: #0f121f;
+            border: 1px solid #2a2f42;
+            padding: 0.6rem 1rem;
+            border-radius: 2rem;
+            color: #e2e8ff;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+
+        .filter-group select:focus {
+            border-color: #a87eff;
+        }
+
+        /* ========= GAME GRID — RIGHT‑ALIGNED FLEX/GRID ========= */
+        /* "biar ke grid game ke kanan" → games will shift to right side,
+           but using a responsive grid that respects empty space on left
+           and pushes items more to the right when room exists.
+           We'll use a combination: main container with display: grid
+           and justify-content: end, or better: auto-fill + margin left auto?
+           To achieve "grid game ke kanan" like a right-aligned gallery,
+           we set the grid container to have content that leans right.
+           Classic method: flex wrap with justify-content: flex-end, but we need structured grid.
+           I will use CSS Grid with grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
+           then add margin-left: auto on the grid container? not perfect.
+           Actually to make games stick to the right side (like RTL gallery but LTR text),
+           we set parent text-align? no. Instead wrap grid in a flex container with justify-content: flex-end?
+           But we also want left space on big screens → games appear as a block on the right.
+        */
         
-        .rating-stars { display: flex; align-items: center; gap: 3px; margin: 8px 0; }
-        .rating-stars i { font-size: 0.7rem; color: #fbbf24; }
-        .rating-stars span { font-size: 0.65rem; color: var(--text-muted); margin-left: 6px; }
-        
-        .game-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
-        .tag { background: var(--bg-secondary); padding: 3px 8px; border-radius: 20px; font-size: 0.6rem; color: var(--accent); }
-        
-        .card-actions {
+        /* Approach: outer wrapper as flex with justify-content: flex-end,
+           and inside grid behaves normally, but it will be placed on the right side.
+           However, we want search/filter above to remain full-width, only game grid right-aligned.
+        */
+        .games-section {
+            margin-top: 1rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .section-header h2 {
+            font-weight: 600;
+            font-size: 1.7rem;
+            background: linear-gradient(120deg, #f0f3ff, #c6b5ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .game-count {
+            font-size: 0.85rem;
+            background: #1e2338;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+        }
+
+        /* RIGHT-ALIGNED GRID CONTAINER */
+        /* The requirement: "biar ke grid game ke kanan" – we shift the whole grid container to the right,
+           while keeping filters/search on top full-width. This creates modern asymmetric layout. */
+        .right-aligned-grid {
             display: flex;
             justify-content: flex-end;
-            gap: 8px;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid var(--border);
+            /* the grid container will be pushed right */
         }
-        .card-actions button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--text-secondary);
-            padding: 8px 12px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            transition: var(--transition);
-        }
-        .card-actions button:hover { background: rgba(59,130,246,0.15); color: var(--accent); }
-        
-        /* Bottom Navigation Mobile */
-        .bottom-nav {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border);
-            padding: 12px 20px;
-            z-index: 100;
-            justify-content: space-around;
-        }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--text-secondary);
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-size: 0.7rem;
-        }
-        .nav-item i { font-size: 1.4rem; }
-        .nav-item.active { color: var(--accent); background: rgba(59,130,246,0.15); }
-        .nav-item.fab {
-            background: var(--accent-gradient);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 50px;
-            margin-top: -20px;
-            box-shadow: 0 8px 20px var(--accent-glow);
-        }
-        
-        /* Skeleton & Empty State */
-        .skeleton {
-            background: linear-gradient(90deg, var(--surface) 25%, var(--surface-hover) 50%, var(--surface) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        .skeleton-cover { aspect-ratio: 3 / 4; width: 100%; border-radius: 20px 20px 0 0; }
-        .skeleton-title { height: 14px; width: 70%; border-radius: 8px; margin: 8px 0; }
-        .skeleton-text { height: 10px; width: 90%; border-radius: 6px; margin: 6px 0; }
-        
-        .empty-state {
-            text-align: center;
-            padding: 4rem;
-            background: var(--surface);
-            border-radius: 24px;
-            grid-column: 1/-1;
-        }
-        .empty-state i { font-size: 4rem; margin-bottom: 1rem; opacity: 0.5; }
-        
-        /* Modals */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(12px);
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-        .modal-content {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 32px;
-            max-width: 550px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-            border: 1px solid var(--border);
-        }
-        .form-group { margin-bottom: 1rem; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        label { font-size: 0.8rem; margin-bottom: 6px; display: block; }
-        input, select {
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 320px));
+            gap: 1.8rem;
             width: 100%;
-            padding: 12px 16px;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
+            max-width: 1400px;
+            transition: all 0.2s;
         }
-        .cover-preview { width: 100%; height: 160px; object-fit: cover; border-radius: 20px; margin-bottom: 1rem; border: 2px solid var(--accent); }
-        .search-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            max-height: 320px;
-            overflow-y: auto;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            z-index: 1000;
-            display: none;
+
+        /* To force grid items to be right-aligned within available space, we set margin-left: auto on the grid?
+           But that makes grid container shrink to content width, causing items to stack left? No.
+           The clean method: .right-aligned-grid > .game-grid { margin-left: auto; margin-right: 0; }
+           This makes the grid container hug the right side, and inside grid items behave normally.
+           Exactly "ke kanan" – the whole library block sits on the right side, empty space on left.
+           This matches modern design where content floats right.
+        */
+        .right-aligned-grid .game-grid {
+            margin-left: auto;
+            margin-right: 0;
         }
-        .search-result-item {
+
+        /* responsive: on smaller screens, remove margin-left to use full width */
+        @media (max-width: 860px) {
+            .right-aligned-grid .game-grid {
+                margin-left: 0;
+                width: 100%;
+            }
+            .right-aligned-grid {
+                justify-content: center;
+            }
+            body {
+                padding: 1.2rem;
+            }
+        }
+
+        /* Game Card Styling */
+        .game-card {
+            background: #11141f;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(2px);
+            box-shadow: 0 15px 30px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(168, 126, 255, 0.4);
+            box-shadow: 0 22px 35px -14px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-content {
+            padding: 1.4rem 1.3rem 1.5rem 1.3rem;
+        }
+
+        .game-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 12px;
+            justify-content: space-between;
+        }
+
+        .game-title h3 {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .badge-difficulty {
+            font-size: 0.7rem;
+            background: #1e293b;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+
+        .game-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin: 0.8rem 0 0.9rem 0;
+            font-size: 0.8rem;
+            color: #9aa5c1;
+        }
+
+        .game-meta span {
+            background: #1a1e2c;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+        }
+
+        .rating-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 10px 0 6px;
+        }
+
+        .stars {
+            color: #f5b042;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+        }
+
+        .rating-value {
+            font-weight: 600;
+            background: #1f253b;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+
+        .vote-count {
+            font-size: 0.7rem;
+            color: #7f8bae;
+        }
+
+        .game-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.2rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .last-updated {
+            font-size: 0.7rem;
+            color: #6b779b;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .edit-btn, .delete-btn {
+            background: none;
+            border: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
             cursor: pointer;
-            border-bottom: 1px solid var(--border);
+            transition: 0.2s;
+            font-family: inherit;
         }
-        .search-result-item:hover { background: var(--accent-gradient); color: white; }
-        .search-result-item img { width: 48px; height: 48px; object-fit: cover; border-radius: 12px; }
-        .detail-hero { height: 240px; background-size: cover; background-position: center; position: relative; }
-        .detail-hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(to top, var(--surface), transparent);
+
+        .edit-btn {
+            background: #2d2f42;
+            color: #cddbff;
         }
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+
+        .edit-btn:hover {
+            background: #3d4070;
+            color: white;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .section { display: none; }
-        .section.active { display: block; }
-        
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .games-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; }
+
+        .delete-btn {
+            background: #2c1e2c;
+            color: #ffaea3;
         }
-        @media (max-width: 900px) {
-            .games-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+
+        .delete-btn:hover {
+            background: #631e1e;
+            color: white;
         }
-        @media (max-width: 768px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0; }
-            .bottom-nav { display: flex; }
-            .content-header { padding: 1rem; }
-            .content-header h1 { font-size: 1.4rem; }
-            .container { padding: 1rem; padding-bottom: 80px; }
-            .stats-grid { gap: 0.75rem; }
-            .stat-card { padding: 1rem; }
-            .stat-card p { font-size: 1.3rem; }
-            .filter-bar { flex-direction: column; border-radius: 24px; }
-            .search-box, select { width: 100%; flex: auto; }
-            .games-grid { gap: 0.8rem; }
-            .game-title { font-size: 0.75rem; }
-            .form-row { grid-template-columns: 1fr; }
-            .modal-content {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                border-radius: 28px 28px 0 0;
-                width: 100%;
-                animation: slideUp 0.3s ease;
-            }
-            @keyframes slideUp {
-                from { transform: translateY(100%); }
-                to { transform: translateY(0); }
-            }
+
+        .empty-message {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: #0c0f1a;
+            border-radius: 2rem;
+            color: #8f9bb3;
+            font-weight: 500;
         }
-        @media (max-width: 480px) {
-            .games-grid { gap: 0.7rem; }
-            .card-content { padding: 0.7rem; }
-            .rating-stars i { font-size: 0.6rem; }
+
+        /* additional styling */
+        .genre-chip {
+            text-transform: capitalize;
         }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <aside class="sidebar">
-        <div class="logo-area"><div class="logo-icon"><i class="fas fa-dice-d6"></i></div><span class="logo-text">GameVault</span></div>
-        <nav class="nav-menu">
-            <a class="nav-link active" data-tab="dashboard"><i class="fas fa-chart-pie"></i><span>Dashboard</span></a>
-            <a class="nav-link" data-tab="library"><i class="fas fa-gamepad"></i><span>My Library</span></a>
-        </nav>
-        <div class="dark-mode-toggle">
-            <i class="fas fa-moon"></i>
-            <label class="switch"><input type="checkbox" id="darkModeToggle"><span class="slider round"></span></label>
-            <i class="fas fa-sun"></i>
+<div class="app-wrapper">
+    <!-- Header & Menu (Dashboard, My Library, Add Game) -->
+    <div class="gamevault-header">
+        <div class="logo-area">
+            <h1>🎮 GameVault</h1>
+            <p>curate your journey</p>
         </div>
-    </aside>
-
-    <div class="bottom-nav">
-        <button class="nav-item active" data-tab="dashboard"><i class="fas fa-chart-pie"></i><span>Stats</span></button>
-        <button class="nav-item fab" id="mobileAddBtn"><i class="fas fa-plus"></i><span>Add</span></button>
-        <button class="nav-item" data-tab="library"><i class="fas fa-gamepad"></i><span>Library</span></button>
+        <div class="nav-menu">
+            <span>Dashboard</span>
+            <span>My Library</span>
+            <span>Add Game</span>
+        </div>
     </div>
 
-    <main class="main-content">
-        <div class="sticky-header">
-            <div class="content-header">
-                <h1 id="pageTitle">Dashboard</h1>
-                <button id="addGameBtn" class="btn-primary"><i class="fas fa-plus"></i> Add Game</button>
+    <!-- Search & Filters exactly as design -->
+    <div class="controls-panel">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Search games" autocomplete="off">
+        </div>
+        <div class="filter-group">
+            <select id="platformFilter">
+                <option value="all">All Platforms</option>
+                <option value="Mobile">Mobile</option>
+                <option value="PC">PC</option>
+                <option value="Console">Console</option>
+            </select>
+            <select id="ratingFilter">
+                <option value="all">All Ratings</option>
+                <option value="4.5">4.5+ Stars</option>
+                <option value="4">4.0+ Stars</option>
+                <option value="3">3.0+ Stars</option>
+            </select>
+            <select id="statusFilter">
+                <option value="all">All Status</option>
+                <option value="Backlog">Backlog</option>
+                <option value="Playing">Playing</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Game Library Section + Right-aligned Grid (ke kanan) -->
+    <div class="games-section">
+        <div class="section-header">
+            <h2>📚 Game Library</h2>
+            <div class="game-count" id="gameCounter">0 titles</div>
+        </div>
+
+        <!-- Right-aligned wrapper: the entire grid will be pushed to the right side -->
+        <div class="right-aligned-grid">
+            <div class="game-grid" id="gameGridContainer">
+                <!-- dynamic game cards injected here -->
             </div>
         </div>
-        <div class="container">
-            <section id="dashboardSection" class="section active">
-                <div class="stats-grid">
-                    <div class="stat-card"><i class="fas fa-gamepad"></i><div><h3>Total Games</h3><p id="totalGames">0</p></div></div>
-                    <div class="stat-card"><i class="fas fa-trophy"></i><div><h3>Completed</h3><p id="completedGames">0</p></div></div>
-                    <div class="stat-card"><i class="fas fa-clock"></i><div><h3>Total Hours</h3><p id="totalHours">0</p></div></div>
-                    <div class="stat-card"><i class="fas fa-star"></i><div><h3>Avg Rating</h3><p id="avgRating">0.0</p></div></div>
-                </div>
-                <div class="charts-row">
-                    <div class="chart-card"><canvas id="genreChart"></canvas><h4>Top Genres</h4></div>
-                    <div class="chart-card"><canvas id="completionChart"></canvas><h4>Completion Status</h4></div>
-                    <div class="chart-card"><canvas id="ratingChart"></canvas><h4>Rating Distribution</h4></div>
-                </div>
-            </section>
-            <section id="librarySection" class="section">
-                <div class="filter-bar">
-                    <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search games..."></div>
-                    <select id="filterGenre"><option value="">All Genres</option></select>
-                    <select id="filterPlatform"><option value="">All Platforms</option></select>
-                    <select id="filterRating"><option value="">All Ratings</option><option value="5">5★</option><option value="4">4★+</option></select>
-                    <select id="filterStatus"><option value="">All Status</option><option value="completed">Completed</option><option value="playing">Playing</option><option value="backlog">Backlog</option></select>
-                </div>
-                <div id="gamesGrid" class="games-grid"></div>
-            </section>
-        </div>
-    </main>
+    </div>
 </div>
 
-<div id="gameModal" class="modal"><div class="modal-content"><div style="display:flex; justify-content:space-between; padding:1.5rem 1.5rem 0"><h3 id="modalTitle">Add New Game</h3><span class="close-modal" style="cursor:pointer; font-size:2rem">&times;</span></div><div style="padding:1.5rem"><div style="position:relative"><input type="text" id="gameSearchInput" placeholder="🔍 Search game from RAWG..." style="width:100%; padding:14px; border-radius:50px; border:1px solid var(--border); background:var(--bg-secondary); color:var(--text-primary)"><div id="searchResults" class="search-results"></div></div><div style="text-align:center; margin:10px 0">— OR —</div><form id="gameForm"><input type="hidden" id="gameId"><div class="form-group"><label>Game Title *</label><input type="text" id="title" required></div><div id="coverPreviewContainer" style="display:none"><img id="coverPreview" class="cover-preview"></div><div class="form-row"><div class="form-group"><label>Platform</label><input type="text" id="platform"></div><div class="form-group"><label>Genre</label><input type="text" id="genre"></div></div><div class="form-group"><label>Tags (comma)</label><input type="text" id="tags"></div><div class="form-row"><div class="form-group"><label>Progress (%)</label><input type="number" id="progress" min="0" max="100" value="0"></div><div class="form-group"><label>Rating (1-5)</label><input type="number" id="rating" step="0.5" min="1" max="5" value="3"></div></div><div class="form-row"><div class="form-group"><label>Hours</label><input type="number" id="hours_played" step="0.5" value="0"></div><div class="form-group"><label>Status</label><select id="status"><option value="backlog">📚 Backlog</option><option value="playing">🎮 Playing</option><option value="completed">🏆 Completed</option></select></div></div><button type="submit" class="btn-primary" style="width:100%">💾 Save Game</button></form></div></div></div>
-
-<div id="deleteModal" class="modal"><div class="modal-content" style="max-width:400px"><div style="text-align:center"><div style="width:60px; height:60px; margin:0 auto 1rem; background:rgba(239,68,68,0.15); border-radius:50%; display:flex; align-items:center; justify-content:center"><i class="fas fa-trash-alt" style="color:#ef4444; font-size:1.5rem"></i></div><h3>Delete Game?</h3><p style="color:var(--text-muted); margin:0.5rem 0 1.5rem">This action cannot be undone.</p><div style="display:flex; gap:1rem"><button id="cancelDeleteBtn" style="flex:1; padding:12px; background:var(--bg-secondary); border:none; border-radius:40px; cursor:pointer">Cancel</button><button id="confirmDeleteBtn" style="flex:1; padding:12px; background:#ef4444; border:none; border-radius:40px; cursor:pointer; color:white">Delete</button></div></div></div></div>
-
-<div id="detailModal" class="modal"><div class="modal-content" style="max-width:700px; padding:0; overflow:hidden"><div style="position:relative"><div id="detailHero" class="detail-hero"></div><span class="close-modal" style="position:absolute; top:20px; right:20px; cursor:pointer; background:rgba(0,0,0,0.5); width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%; color:white; font-size:1.2rem">&times;</span></div><div id="detailContent" style="padding:1.5rem"></div></div></div>
-
 <script>
-    window.SUPABASE_URL = 'https://inwjlxiqxtztjtrttqke.supabase.co';
-    window.SUPABASE_KEY = 'sb_publishable_ntFp5P_qMnQKQSv3-MX9RA_dgOit_H1';
-    window.RAWG_API_KEY = 'acb03a4a2dd04337b6b62eb78e325c59';
+    // ---------- GAME DATA (extended from the screenshot + extra for demo) ----------
+    // include League of Legends: Wild Rift as baseline, plus more games to show grid on the right.
+    const gamesData = [
+        {
+            id: 1,
+            title: "League of Legends: Wild Rift",
+            rating: 4.5,
+            starsCount: 3120,
+            difficulty: "Easy",
+            genre: "MOBA",
+            lastUpdated: "1 day ago",
+            platform: "Mobile",
+            status: "Backlog",
+            ratingValue: 4.5
+        },
+        {
+            id: 2,
+            title: "Stellar Horizon",
+            rating: 4.8,
+            starsCount: 8950,
+            difficulty: "Medium",
+            genre: "RPG",
+            lastUpdated: "3 days ago",
+            platform: "PC",
+            status: "Playing",
+            ratingValue: 4.8
+        },
+        {
+            id: 3,
+            title: "Cyber Oath",
+            rating: 4.2,
+            starsCount: 2100,
+            difficulty: "Hard",
+            genre: "Action",
+            lastUpdated: "5 days ago",
+            platform: "Console",
+            status: "Backlog",
+            ratingValue: 4.2
+        },
+        {
+            id: 4,
+            title: "Mystic Echoes",
+            rating: 4.9,
+            starsCount: 4700,
+            difficulty: "Medium",
+            genre: "Adventure",
+            lastUpdated: "12 hours ago",
+            platform: "Mobile",
+            status: "Completed",
+            ratingValue: 4.9
+        },
+        {
+            id: 5,
+            title: "Apex Legends: Mobile",
+            rating: 4.3,
+            starsCount: 5600,
+            difficulty: "Hard",
+            genre: "Battle Royale",
+            lastUpdated: "2 days ago",
+            platform: "Mobile",
+            status: "Playing",
+            ratingValue: 4.3
+        },
+        {
+            id: 6,
+            title: "Elden Ring (Shadow Keep)",
+            rating: 4.9,
+            starsCount: 28900,
+            difficulty: "Expert",
+            genre: "Souls-like",
+            lastUpdated: "2 weeks ago",
+            platform: "Console",
+            status: "Backlog",
+            ratingValue: 4.9
+        },
+        {
+            id: 7,
+            title: "Hades II",
+            rating: 4.7,
+            starsCount: 8450,
+            difficulty: "Medium",
+            genre: "Roguelite",
+            lastUpdated: "6 days ago",
+            platform: "PC",
+            status: "Playing",
+            ratingValue: 4.7
+        }
+    ];
+
+    // Helper: render star display
+    function renderStars(rating) {
+        const fullStars = Math.floor(rating);
+        const halfStar = (rating % 1) >= 0.5;
+        let starString = '';
+        for (let i = 0; i < fullStars; i++) starString += '★';
+        if (halfStar) starString += '½';
+        const emptyStars = 5 - Math.ceil(rating);
+        for (let i = 0; i < emptyStars; i++) starString += '☆';
+        return starString;
+    }
+
+    // filter logic based on search, platform, rating threshold, status
+    function filterGames() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+        const platformVal = document.getElementById('platformFilter').value;
+        const ratingFilterVal = document.getElementById('ratingFilter').value;
+        const statusVal = document.getElementById('statusFilter').value;
+
+        return gamesData.filter(game => {
+            // search match
+            if (searchTerm && !game.title.toLowerCase().includes(searchTerm)) return false;
+            // platform match
+            if (platformVal !== 'all' && game.platform !== platformVal) return false;
+            // rating filter (minimum stars)
+            if (ratingFilterVal !== 'all') {
+                const minRating = parseFloat(ratingFilterVal);
+                if (game.ratingValue < minRating) return false;
+            }
+            // status match
+            if (statusVal !== 'all' && game.status !== statusVal) return false;
+            return true;
+        });
+    }
+
+    // generate game cards HTML and inject into grid
+    function renderGameGrid() {
+        const filtered = filterGames();
+        const gridContainer = document.getElementById('gameGridContainer');
+        const counterSpan = document.getElementById('gameCounter');
+        counterSpan.innerText = `${filtered.length} ${filtered.length === 1 ? 'title' : 'titles'}`;
+
+        if (filtered.length === 0) {
+            gridContainer.innerHTML = `<div class="empty-message" style="grid-column:1/-1; width:100%;">✨ No games match your filters. Try adjusting search or criteria ✨</div>`;
+            return;
+        }
+
+        // map each game to card
+        const cardsHtml = filtered.map(game => {
+            const starSymbols = renderStars(game.rating);
+            // format stars count with + if > 1000
+            const formattedStars = game.starsCount >= 1000 ? (game.starsCount/1000).toFixed(1)+'k' : game.starsCount;
+
+            return `
+                <div class="game-card" data-game-id="${game.id}">
+                    <div class="card-content">
+                        <div class="game-title">
+                            <h3>${escapeHtml(game.title)}</h3>
+                            <span class="badge-difficulty">${game.difficulty}</span>
+                        </div>
+                        <div class="game-meta">
+                            <span>🎮 ${game.platform}</span>
+                            <span>🎭 ${game.genre}</span>
+                            <span>📌 ${game.status}</span>
+                        </div>
+                        <div class="rating-row">
+                            <div class="stars">${starSymbols}</div>
+                            <div class="rating-value">${game.rating} out of 5</div>
+                            <div class="vote-count">⭐ ${formattedStars}+</div>
+                        </div>
+                        <div class="game-footer">
+                            <div class="last-updated">🕒 Updated: ${game.lastUpdated}</div>
+                            <div class="action-buttons">
+                                <button class="edit-btn" data-id="${game.id}">Edit</button>
+                                <button class="delete-btn" data-id="${game.id}">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        gridContainer.innerHTML = cardsHtml;
+
+        // attach event listeners for edit/delete dynamically
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const gameId = parseInt(btn.getAttribute('data-id'));
+                const game = gamesData.find(g => g.id === gameId);
+                if (game) {
+                    const newTitle = prompt('Edit game title:', game.title);
+                    if (newTitle && newTitle.trim()) game.title = newTitle.trim();
+                    const newRating = prompt('Edit rating (1-5):', game.rating);
+                    if (newRating && !isNaN(parseFloat(newRating)) && parseFloat(newRating)>=0 && parseFloat(newRating)<=5) {
+                        game.rating = parseFloat(parseFloat(newRating).toFixed(1));
+                        game.ratingValue = game.rating;
+                    }
+                    renderGameGrid(); // re-render after edit
+                }
+            });
+        });
+
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const gameId = parseInt(btn.getAttribute('data-id'));
+                const index = gamesData.findIndex(g => g.id === gameId);
+                if (index !== -1) {
+                    if (confirm(`Delete "${gamesData[index].title}" from library?`)) {
+                        gamesData.splice(index, 1);
+                        renderGameGrid();
+                    }
+                }
+            });
+        });
+    }
+
+    // simple XSS protection
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // attach filter event listeners
+    function bindFilters() {
+        const searchInput = document.getElementById('searchInput');
+        const platformSelect = document.getElementById('platformFilter');
+        const ratingSelect = document.getElementById('ratingFilter');
+        const statusSelect = document.getElementById('statusFilter');
+
+        const update = () => renderGameGrid();
+        searchInput.addEventListener('input', update);
+        platformSelect.addEventListener('change', update);
+        ratingSelect.addEventListener('change', update);
+        statusSelect.addEventListener('change', update);
+    }
+
+    // init
+    function init() {
+        bindFilters();
+        renderGameGrid();
+    }
+
+    init();
 </script>
-<script src="script.js"></script>
 </body>
 </html>
