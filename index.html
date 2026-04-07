@@ -6,16 +6,16 @@
     <meta name="theme-color" content="#8b5cf6">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>GameVault | Premium Game Tracker</title>
+    <title>GameVault | Ultra-Premium Game Tracker</title>
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     
-    <!-- Google Fonts - Premium Typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome Icons -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <!-- Chart.js -->
@@ -26,49 +26,37 @@
     
     <style>
         /* ============================================
-           CSS VARIABLES - Premium Dark Theme
+           ULTRA-PREMIUM CSS - PURE CSS
+           Dark Theme | Glassmorphism | Professional
            ============================================ */
+        
+        /* ---------- CSS VARIABLES ---------- */
         :root {
-            /* Light Mode (Default) */
-            --bg-primary: #f8fafc;
-            --bg-secondary: #ffffff;
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #64748b;
-            --border: rgba(226, 232, 240, 0.5);
-            --border-subtle: #e2e8f0;
-            --accent: #8b5cf6;
-            --accent-hover: #7c3aed;
-            --accent-glow: rgba(139, 92, 246, 0.3);
+            /* Deep Charcoal & Midnight Blue Theme */
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #121212;
+            --bg-tertiary: #1a1a1a;
+            --surface: #1e1e1e;
+            --surface-hover: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #6b6b6b;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-light: rgba(255, 255, 255, 0.05);
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-glow: rgba(59, 130, 246, 0.3);
+            --accent-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --sidebar-bg: rgba(30, 27, 46, 0.95);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.05);
-            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.08);
-            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1);
-            --shadow-xl: 0 25px 50px -12px rgba(0,0,0,0.15);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Dark Mode - Premium Deep Charcoal */
-        .dark-mode {
-            --bg-primary: #121212;
-            --bg-secondary: #1E1E1E;
-            --card-bg: rgba(30, 30, 30, 0.9);
-            --glass-bg: rgba(30, 30, 30, 0.8);
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --text-muted: #94a3b8;
-            --border: rgba(51, 51, 51, 0.5);
-            --border-subtle: #333333;
-            --accent: #8b5cf6;
-            --accent-hover: #a855f7;
-            --sidebar-bg: rgba(18, 18, 18, 0.95);
+            --glass-bg: rgba(18, 18, 18, 0.8);
             --glass-border: rgba(255, 255, 255, 0.05);
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -79,20 +67,22 @@
         }
 
         body {
-            font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             transition: var(--transition);
             overflow-x: hidden;
         }
 
-        /* Custom Premium Scrollbar */
+        /* ============================================
+           CUSTOM PREMIUM SCROLLBAR
+           ============================================ */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
+            background: var(--bg-tertiary);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
@@ -111,18 +101,19 @@
         }
 
         /* ============================================
-           LAYOUT - Fixed Sidebar + Main Content
+           LAYOUT - GLASSMORPHISM SIDEBAR
            ============================================ */
         .app-container {
             display: flex;
             min-height: 100vh;
         }
 
-        /* Desktop Sidebar - Glassmorphism */
+        /* Desktop Sidebar - Glassmorphism Premium */
         .sidebar {
             width: 280px;
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(12px);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             padding: 2rem 1.5rem;
             display: flex;
             flex-direction: column;
@@ -132,7 +123,7 @@
             top: 0;
             left: 0;
             bottom: 0;
-            z-index: 10;
+            z-index: 20;
             transition: var(--transition);
         }
 
@@ -142,36 +133,39 @@
             gap: 12px;
         }
         .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent), #ec4899);
-            border-radius: 14px;
+            width: 44px;
+            height: 44px;
+            background: var(--accent-gradient);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 0 20px var(--accent-glow);
         }
         .logo-icon i {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: white;
         }
         .logo-text {
-            font-size: 1.3rem;
-            font-weight: 700;
+            font-size: 1.4rem;
+            font-weight: 800;
             background: linear-gradient(135deg, #fff, var(--accent));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
 
+        /* Navigation Menu */
         .nav-menu {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+            flex: 1;
         }
         .nav-link {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             padding: 12px 16px;
             border-radius: 14px;
             color: var(--text-secondary);
@@ -179,15 +173,34 @@
             font-weight: 500;
             text-decoration: none;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
-        .nav-link i { width: 24px; font-size: 1.2rem; }
+        .nav-link i { 
+            width: 24px; 
+            font-size: 1.2rem;
+        }
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            background: var(--accent-gradient);
+            transition: width 0.3s ease;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        .nav-link:hover::before {
+            width: 100%;
+        }
         .nav-link:hover {
-            background: rgba(139, 92, 246, 0.15);
-            color: var(--accent);
+            color: white;
             transform: translateX(5px);
         }
         .nav-link.active {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.1));
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.1));
             color: var(--accent);
             border-left: 3px solid var(--accent);
         }
@@ -197,10 +210,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: auto;
-            padding: 0.75rem;
-            background: rgba(255,255,255,0.05);
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 40px;
+            border: 1px solid var(--border);
+        }
+        .dark-mode-toggle i {
+            font-size: 1rem;
+            color: var(--text-secondary);
         }
         .switch {
             position: relative;
@@ -208,12 +225,16 @@
             width: 52px;
             height: 26px;
         }
-        .switch input { opacity: 0; width: 0; height: 0; }
+        .switch input { 
+            opacity: 0; 
+            width: 0; 
+            height: 0; 
+        }
         .slider {
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #3a3a4a;
+            background-color: #2a2a2a;
             border-radius: 34px;
             transition: 0.3s;
         }
@@ -228,57 +249,21 @@
             border-radius: 50%;
             transition: 0.3s;
         }
-        input:checked + .slider { background: linear-gradient(135deg, var(--accent), var(--accent-hover)); }
-        input:checked + .slider:before { transform: translateX(26px); }
+        input:checked + .slider {
+            background: var(--accent-gradient);
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
 
-        /* Main Content - Margin Left for Sidebar */
+        /* ============================================
+           MAIN CONTENT
+           ============================================ */
         .main-content {
             flex: 1;
             margin-left: 280px;
-            padding: 2rem;
-            padding-bottom: 80px;
+            padding: 2rem 2rem 2rem 2rem;
             min-height: 100vh;
-        }
-
-        /* Bottom Navigation (Mobile Only) */
-        .bottom-nav {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--glass-border);
-            padding: 10px 20px;
-            padding-bottom: calc(10px + env(safe-area-inset-bottom));
-            z-index: 100;
-            justify-content: space-around;
-        }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: var(--transition);
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            min-height: 44px;
-        }
-        .nav-item i { font-size: 1.4rem; }
-        .nav-item.active { color: var(--accent); background: rgba(139, 92, 246, 0.15); }
-        .nav-item.fab {
-            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-            color: white;
-            padding: 12px 20px;
-            border-radius: 50px;
-            margin-top: -20px;
-            box-shadow: 0 8px 20px var(--accent-glow);
         }
 
         /* Header */
@@ -299,9 +284,9 @@
             color: transparent;
         }
 
-        /* Buttons */
+        /* Premium Buttons */
         .btn-primary {
-            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            background: var(--accent-gradient);
             border: none;
             padding: 12px 28px;
             border-radius: 40px;
@@ -313,10 +298,19 @@
             gap: 8px;
             transition: var(--transition);
             min-height: 44px;
+            box-shadow: 0 4px 15px var(--accent-glow);
         }
-        .btn-primary:active { transform: scale(0.97); }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--accent-glow);
+        }
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
 
-        /* Stats Cards */
+        /* ============================================
+           STATS CARDS - GLASSMORPHISM
+           ============================================ */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -324,58 +318,101 @@
             margin-bottom: 2rem;
         }
         .stat-card {
-            background: var(--card-bg);
+            background: var(--surface);
             backdrop-filter: blur(10px);
             padding: 1.5rem;
             border-radius: 24px;
             display: flex;
             align-items: center;
             gap: 1rem;
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border);
             transition: var(--transition);
         }
-        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-        .stat-card i { font-size: 2rem; background: linear-gradient(135deg, var(--accent), #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .stat-card h3 { font-size: 0.75rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .stat-card p { font-size: 1.8rem; font-weight: 700; }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            background: var(--surface-hover);
+            border-color: var(--accent);
+        }
+        .stat-card i { 
+            font-size: 2rem; 
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .stat-card h3 { 
+            font-size: 0.7rem; 
+            font-weight: 500; 
+            color: var(--text-muted); 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+        }
+        .stat-card p { 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            line-height: 1.2;
+        }
 
-        /* Charts */
+        /* ============================================
+           CHARTS - PREMIUM STYLING
+           ============================================ */
         .charts-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
         .chart-card {
-            background: var(--card-bg);
+            background: var(--surface);
             backdrop-filter: blur(10px);
             border-radius: 24px;
             padding: 1.5rem;
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border);
+            transition: var(--transition);
         }
-        .chart-card h4 { text-align: center; margin-top: 1rem; color: var(--text-muted); font-weight: 500; }
+        .chart-card:hover {
+            border-color: var(--accent);
+        }
+        .chart-card h4 { 
+            text-align: center; 
+            margin-top: 1rem; 
+            color: var(--text-muted); 
+            font-weight: 500;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
 
-        /* Filter Bar */
+        /* ============================================
+           FILTER BAR
+           ============================================ */
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
             margin-bottom: 2rem;
-            background: var(--card-bg);
+            background: var(--surface);
             backdrop-filter: blur(10px);
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             border-radius: 60px;
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border);
         }
         .search-box {
             flex: 1;
             display: flex;
             align-items: center;
             gap: 10px;
-            background: var(--bg-primary);
-            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            padding: 8px 18px;
             border-radius: 40px;
             border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .search-box:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+        }
+        .search-box i {
+            color: var(--text-muted);
         }
         .search-box input {
             flex: 1;
@@ -383,54 +420,56 @@
             border: none;
             outline: none;
             color: var(--text-primary);
+            font-size: 0.9rem;
             min-height: 40px;
         }
         select {
-            background: var(--bg-primary);
+            background: var(--bg-tertiary);
             border: 1px solid var(--border);
             padding: 8px 20px;
             border-radius: 40px;
             color: var(--text-primary);
             cursor: pointer;
             min-height: 44px;
+            transition: var(--transition);
+        }
+        select:hover, select:focus {
+            border-color: var(--accent);
+            outline: none;
         }
 
         /* ============================================
-           GAME CARD - PREMIUM DESIGN
+           GAMES GRID - 4 KOLOM DESKTOP, 2 KOLOM MOBILE
            ============================================ */
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
         }
-        @media (min-width: 768px) {
-            .games-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.8rem; }
-        }
-        @media (min-width: 1024px) {
-            .games-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 2rem; }
-        }
 
-        /* Game Card Premium */
+        /* ============================================
+           GAME CARD - ASPECT RATIO 3:4
+           ============================================ */
         .game-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            background: var(--surface);
+            border-radius: 16px;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+            border: 1px solid var(--border);
             cursor: pointer;
         }
         .game-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: var(--shadow-xl);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.5);
             border-color: var(--accent);
         }
 
-        /* Cover Image - Aspect Ratio 2:3 (Poster) */
+        /* Cover Image - 3:4 Aspect Ratio */
         .game-cover {
             position: relative;
-            aspect-ratio: 2 / 3;
+            aspect-ratio: 3 / 4;
             overflow: hidden;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
         }
         .game-cover img {
             width: 100%;
@@ -439,38 +478,41 @@
             transition: transform 0.5s ease;
         }
         .game-card:hover .game-cover img {
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
 
-        /* Gradient Overlay untuk Judul */
+        /* Gradient Overlay for Text */
         .cover-overlay {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 50%;
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+            height: 60%;
+            background: linear-gradient(to top, 
+                rgba(0, 0, 0, 0.9) 0%,
+                rgba(0, 0, 0, 0.5) 50%,
+                transparent 100%);
             pointer-events: none;
         }
 
-        /* Progress Bar Tipis Elegan */
+        /* Progress Bar */
         .progress-overlay {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
             height: 3px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.1);
         }
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+            background: var(--accent-gradient);
             transition: width 0.5s ease;
         }
 
         /* Card Content */
         .card-content {
-            padding: 0.9rem;
+            padding: 1rem;
         }
         .game-title {
             font-size: 0.9rem;
@@ -487,16 +529,17 @@
             color: var(--text-muted);
         }
 
-        /* Status Badge - Pill-shaped Premium */
+        /* Status Badge */
         .status-badge {
             display: inline-flex;
             align-items: center;
             gap: 4px;
             padding: 4px 10px;
             border-radius: 30px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 600;
             letter-spacing: 0.3px;
+            margin-bottom: 8px;
         }
         .status-badge.playing {
             background: rgba(59, 130, 246, 0.15);
@@ -514,11 +557,18 @@
         .rating-stars {
             display: flex;
             align-items: center;
-            gap: 2px;
+            gap: 3px;
             margin: 8px 0;
         }
-        .rating-stars i { font-size: 0.7rem; color: #fbbf24; }
-        .rating-stars span { font-size: 0.65rem; color: var(--text-muted); margin-left: 6px; }
+        .rating-stars i { 
+            font-size: 0.7rem; 
+            color: #fbbf24;
+        }
+        .rating-stars span { 
+            font-size: 0.65rem; 
+            color: var(--text-muted); 
+            margin-left: 6px;
+        }
 
         .game-meta {
             display: flex;
@@ -527,20 +577,20 @@
             margin: 8px 0;
         }
         .tag {
-            background: var(--bg-primary);
-            padding: 2px 8px;
+            background: var(--bg-tertiary);
+            padding: 3px 8px;
             border-radius: 20px;
             font-size: 0.6rem;
             color: var(--accent);
         }
 
-        /* Touch-friendly buttons */
+        /* Card Actions - Touch Friendly */
         .card-actions {
             display: flex;
             justify-content: flex-end;
             gap: 8px;
-            margin-top: 8px;
-            padding-top: 8px;
+            margin-top: 10px;
+            padding-top: 10px;
             border-top: 1px solid var(--border);
         }
         .card-actions button {
@@ -556,13 +606,15 @@
             transition: var(--transition);
         }
         .card-actions button:hover {
-            background: rgba(139, 92, 246, 0.15);
+            background: rgba(59, 130, 246, 0.15);
             color: var(--accent);
         }
 
-        /* Skeleton Loading - Shimmer Effect */
+        /* ============================================
+           SKELETON LOADING
+           ============================================ */
         .skeleton {
-            background: linear-gradient(90deg, var(--border-subtle) 25%, var(--bg-primary) 50%, var(--border-subtle) 75%);
+            background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--surface) 50%, var(--bg-tertiary) 75%);
             background-size: 200% 100%;
             animation: shimmer 1.5s infinite;
         }
@@ -570,18 +622,33 @@
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
-        .skeleton-cover { aspect-ratio: 2 / 3; width: 100%; border-radius: 20px 20px 0 0; }
-        .skeleton-title { height: 14px; width: 70%; border-radius: 8px; margin: 8px 0; }
-        .skeleton-text { height: 10px; width: 90%; border-radius: 6px; margin: 6px 0; }
+        .skeleton-cover {
+            aspect-ratio: 3 / 4;
+            width: 100%;
+            border-radius: 16px 16px 0 0;
+        }
+        .skeleton-title {
+            height: 14px;
+            width: 70%;
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+        .skeleton-text {
+            height: 10px;
+            width: 90%;
+            border-radius: 6px;
+            margin: 6px 0;
+        }
 
-        /* Empty State Premium */
+        /* ============================================
+           EMPTY STATE PREMIUM
+           ============================================ */
         .empty-state {
             text-align: center;
             padding: 4rem 2rem;
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 28px;
-            border: 1px solid var(--glass-border);
+            background: var(--surface);
+            border-radius: 24px;
+            border: 1px solid var(--border);
         }
         .empty-state i {
             font-size: 4rem;
@@ -589,8 +656,17 @@
             opacity: 0.5;
             color: var(--accent);
         }
+        .empty-state h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .empty-state p {
+            color: var(--text-muted);
+        }
 
-        /* Search Results Glassmorphism */
+        /* ============================================
+           SEARCH RESULTS GLASSMORPHISM
+           ============================================ */
         .search-results {
             position: absolute;
             top: 100%;
@@ -616,7 +692,7 @@
             transition: var(--transition);
         }
         .search-result-item:hover {
-            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            background: var(--accent-gradient);
             color: white;
         }
         .search-result-item img {
@@ -626,13 +702,15 @@
             border-radius: 12px;
         }
 
-        /* Modals - Glassmorphism */
+        /* ============================================
+           MODALS - GLASSMORPHISM + BOTTOM SHEET MOBILE
+           ============================================ */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(12px);
             justify-content: center;
             align-items: center;
@@ -647,8 +725,196 @@
             max-height: 85vh;
             overflow-y: auto;
             border: 1px solid var(--glass-border);
+            animation: modalFadeIn 0.3s ease;
         }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Form Styles */
+        .form-group { margin-bottom: 1rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        label { 
+            font-weight: 500; 
+            display: block; 
+            margin-bottom: 6px; 
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            min-height: 48px;
+            transition: var(--transition);
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+        }
+
+        .cover-preview {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            border: 2px solid var(--accent);
+        }
+
+        /* Section Toggle */
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ============================================
+           BOTTOM NAVIGATION (MOBILE ONLY)
+           ============================================ */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            padding: 12px 20px;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            z-index: 100;
+            justify-content: space-around;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            min-height: 44px;
+        }
+        .nav-item i { font-size: 1.4rem; }
+        .nav-item.active { 
+            color: var(--accent); 
+            background: rgba(59, 130, 246, 0.15);
+        }
+        .nav-item.fab {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            margin-top: -20px;
+            box-shadow: 0 8px 20px var(--accent-glow);
+        }
+
+        /* Detail Modal */
+        .detail-hero {
+            height: 240px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .detail-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to top, var(--surface), transparent);
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+        
+        /* Tablet & Desktop Large */
+        @media (max-width: 1200px) {
+            .games-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.2rem;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+
+        /* Mobile */
         @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+                padding-bottom: 80px;
+            }
+            .bottom-nav {
+                display: flex;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+            }
+            .stat-card {
+                padding: 1rem;
+            }
+            .stat-card p {
+                font-size: 1.3rem;
+            }
+            .stat-card i {
+                font-size: 1.5rem;
+            }
+            .filter-bar {
+                flex-direction: column;
+                border-radius: 24px;
+                padding: 1rem;
+            }
+            .search-box {
+                width: 100%;
+            }
+            select {
+                width: 100%;
+            }
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+            .game-title {
+                font-size: 0.75rem;
+            }
+            .status-badge {
+                font-size: 0.55rem;
+                padding: 3px 8px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
             .modal-content {
                 position: fixed;
                 bottom: 0;
@@ -664,115 +930,160 @@
             }
         }
 
-        .form-group { margin-bottom: 1rem; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        label { font-weight: 500; display: block; margin-bottom: 6px; font-size: 0.85rem; }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 48px;
-        }
-        input:focus, select:focus { outline: none; border-color: var(--accent); }
-
-        .cover-preview {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            border-radius: 20px;
-            margin-bottom: 1rem;
-            border: 2px solid var(--accent);
+        /* Extra Small Mobile */
+        @media (max-width: 480px) {
+            .games-grid {
+                gap: 0.7rem;
+            }
+            .card-content {
+                padding: 0.7rem;
+            }
+            .game-title {
+                font-size: 0.7rem;
+            }
+            .rating-stars i {
+                font-size: 0.6rem;
+            }
+            .card-actions button {
+                padding: 6px 8px;
+                font-size: 0.6rem;
+                min-width: 45px;
+            }
         }
 
-        .section { display: none; }
-        .section.active { display: block; }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0; padding: 1rem; padding-bottom: 80px; }
-            .bottom-nav { display: flex; }
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-            .stat-card { padding: 1rem; }
-            .stat-card p { font-size: 1.3rem; }
-            .filter-bar { flex-direction: column; border-radius: 20px; }
-            .games-grid { gap: 1rem; }
-            .game-title { font-size: 0.75rem; }
+        /* White Space - Breathable Layout */
+        .container, .section {
+            max-width: 1400px;
+            margin: 0 auto;
         }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 <div class="app-container">
-    <!-- Desktop Sidebar -->
+    <!-- Desktop Sidebar - Glassmorphism Premium -->
     <aside class="sidebar">
         <div class="logo-area">
             <div class="logo-icon"><i class="fas fa-dice-d6"></i></div>
             <span class="logo-text">GameVault</span>
         </div>
         <nav class="nav-menu">
-            <a class="nav-link active" data-tab="dashboard"><i class="fas fa-chart-pie"></i><span>Dashboard</span></a>
-            <a class="nav-link" data-tab="library"><i class="fas fa-gamepad"></i><span>My Library</span></a>
+            <a class="nav-link active" data-tab="dashboard">
+                <i class="fas fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+            <a class="nav-link" data-tab="library">
+                <i class="fas fa-gamepad"></i>
+                <span>My Library</span>
+            </a>
         </nav>
         <div class="dark-mode-toggle">
             <i class="fas fa-moon"></i>
-            <label class="switch"><input type="checkbox" id="darkModeToggle"><span class="slider round"></span></label>
+            <label class="switch">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider round"></span>
+            </label>
             <i class="fas fa-sun"></i>
         </div>
     </aside>
 
     <!-- Mobile Bottom Navigation -->
     <div class="bottom-nav">
-        <button class="nav-item active" data-tab="dashboard"><i class="fas fa-chart-pie"></i><span>Stats</span></button>
-        <button class="nav-item fab" id="mobileAddBtn"><i class="fas fa-plus"></i><span>Add</span></button>
-        <button class="nav-item" data-tab="library"><i class="fas fa-gamepad"></i><span>Library</span></button>
+        <button class="nav-item active" data-tab="dashboard">
+            <i class="fas fa-chart-pie"></i>
+            <span>Stats</span>
+        </button>
+        <button class="nav-item fab" id="mobileAddBtn">
+            <i class="fas fa-plus"></i>
+            <span>Add</span>
+        </button>
+        <button class="nav-item" data-tab="library">
+            <i class="fas fa-gamepad"></i>
+            <span>Library</span>
+        </button>
     </div>
 
     <!-- Main Content -->
     <main class="main-content">
         <header class="content-header">
             <h1 id="pageTitle">Dashboard</h1>
-            <button id="addGameBtn" class="btn-primary"><i class="fas fa-plus"></i> Add Game</button>
+            <button id="addGameBtn" class="btn-primary">
+                <i class="fas fa-plus"></i> Add Game
+            </button>
         </header>
 
         <!-- Dashboard Section -->
         <section id="dashboardSection" class="section active">
             <div class="stats-grid">
-                <div class="stat-card"><i class="fas fa-gamepad"></i><div><h3>Total Games</h3><p id="totalGames">0</p></div></div>
-                <div class="stat-card"><i class="fas fa-trophy"></i><div><h3>Completed</h3><p id="completedGames">0</p></div></div>
-                <div class="stat-card"><i class="fas fa-clock"></i><div><h3>Total Hours</h3><p id="totalHours">0</p></div></div>
-                <div class="stat-card"><i class="fas fa-star"></i><div><h3>Avg Rating</h3><p id="avgRating">0.0</p></div></div>
+                <div class="stat-card">
+                    <i class="fas fa-gamepad"></i>
+                    <div>
+                        <h3>Total Games</h3>
+                        <p id="totalGames">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-trophy"></i>
+                    <div>
+                        <h3>Completed</h3>
+                        <p id="completedGames">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <h3>Total Hours</h3>
+                        <p id="totalHours">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-star"></i>
+                    <div>
+                        <h3>Avg Rating</h3>
+                        <p id="avgRating">0.0</p>
+                    </div>
+                </div>
             </div>
             <div class="charts-row">
-                <div class="chart-card"><canvas id="genreChart"></canvas><h4>Top Genres</h4></div>
-                <div class="chart-card"><canvas id="completionChart"></canvas><h4>Completion Status</h4></div>
-                <div class="chart-card"><canvas id="ratingChart"></canvas><h4>Rating Distribution</h4></div>
+                <div class="chart-card">
+                    <canvas id="genreChart"></canvas>
+                    <h4>Top Genres</h4>
+                </div>
+                <div class="chart-card">
+                    <canvas id="completionChart"></canvas>
+                    <h4>Completion Status</h4>
+                </div>
+                <div class="chart-card">
+                    <canvas id="ratingChart"></canvas>
+                    <h4>Rating Distribution</h4>
+                </div>
             </div>
         </section>
 
         <!-- Library Section -->
         <section id="librarySection" class="section">
             <div class="filter-bar">
-                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search games..."></div>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search games...">
+                </div>
                 <select id="filterGenre"><option value="">All Genres</option></select>
                 <select id="filterPlatform"><option value="">All Platforms</option></select>
-                <select id="filterRating"><option value="">Rating</option><option value="5">5★</option><option value="4">4★+</option></select>
-                <select id="filterStatus"><option value="">Status</option><option value="completed">Completed</option><option value="playing">Playing</option><option value="backlog">Backlog</option></select>
+                <select id="filterRating">
+                    <option value="">All Ratings</option>
+                    <option value="5">5★ Only</option>
+                    <option value="4">4★ & Up</option>
+                    <option value="3">3★ & Up</option>
+                </select>
+                <select id="filterStatus">
+                    <option value="">All Status</option>
+                    <option value="completed">Completed</option>
+                    <option value="playing">Playing</option>
+                    <option value="backlog">Backlog</option>
+                </select>
             </div>
-            <div id="gamesGrid" class="games-grid"></div>
+            <div id="gamesGrid" class="games-grid">
+                <!-- Game cards will be inserted here -->
+            </div>
         </section>
     </main>
 </div>
@@ -781,31 +1092,61 @@
 <div id="gameModal" class="modal">
     <div class="modal-content">
         <div class="modal-header" style="display:flex; justify-content:space-between; padding:1.5rem 1.5rem 0">
-            <h3 id="modalTitle">Add New Game</h3>
+            <h3 id="modalTitle" style="font-size:1.3rem; font-weight:700">Add New Game</h3>
             <span class="close-modal" style="cursor:pointer; font-size:2rem">&times;</span>
         </div>
         <div style="padding:1.5rem">
             <div style="position:relative; margin-bottom:1rem">
-                <input type="text" id="gameSearchInput" placeholder="🔍 Search game from RAWG..." style="width:100%; padding:14px; border-radius:50px; border:1px solid var(--border); background:var(--bg-primary)">
+                <input type="text" id="gameSearchInput" placeholder="🔍 Search game from RAWG..." style="width:100%; padding:14px 18px; border-radius:50px; border:1px solid var(--border); background:var(--bg-tertiary); color:var(--text-primary)">
                 <div id="searchResults" class="search-results"></div>
             </div>
-            <div style="text-align:center; margin:10px 0">— OR —</div>
+            <div style="text-align:center; margin:10px 0; color:var(--text-muted)">— OR —</div>
             <form id="gameForm">
                 <input type="hidden" id="gameId">
-                <div class="form-group"><label>Title *</label><input type="text" id="title" required></div>
-                <div id="coverPreviewContainer" style="display:none"><img id="coverPreview" class="cover-preview"></div>
-                <div class="form-row">
-                    <div class="form-group"><label>Platform</label><input type="text" id="platform"></div>
-                    <div class="form-group"><label>Genre</label><input type="text" id="genre"></div>
+                <div class="form-group">
+                    <label>Game Title *</label>
+                    <input type="text" id="title" required>
                 </div>
-                <div class="form-group"><label>Tags (comma)</label><input type="text" id="tags"></div>
-                <div class="form-row">
-                    <div class="form-group"><label>Progress (%)</label><input type="number" id="progress" min="0" max="100" value="0"></div>
-                    <div class="form-group"><label>Rating (1-5)</label><input type="number" id="rating" step="0.5" min="1" max="5" value="3"></div>
+                <div id="coverPreviewContainer" style="display:none">
+                    <img id="coverPreview" class="cover-preview" src="">
                 </div>
                 <div class="form-row">
-                    <div class="form-group"><label>Hours</label><input type="number" id="hours_played" step="0.5" value="0"></div>
-                    <div class="form-group"><label>Status</label><select id="status"><option value="backlog">📚 Backlog</option><option value="playing">🎮 Playing</option><option value="completed">🏆 Completed</option></select></div>
+                    <div class="form-group">
+                        <label>Platform</label>
+                        <input type="text" id="platform">
+                    </div>
+                    <div class="form-group">
+                        <label>Genre</label>
+                        <input type="text" id="genre">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Tags (comma separated)</label>
+                    <input type="text" id="tags">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Progress (%)</label>
+                        <input type="number" id="progress" min="0" max="100" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Rating (1-5)</label>
+                        <input type="number" id="rating" step="0.5" min="1" max="5" value="3">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Hours Played</label>
+                        <input type="number" id="hours_played" step="0.5" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="status">
+                            <option value="backlog">📚 Backlog</option>
+                            <option value="playing">🎮 Playing</option>
+                            <option value="completed">🏆 Completed</option>
+                        </select>
+                    </div>
                 </div>
                 <button type="submit" class="btn-primary" style="width:100%">💾 Save Game</button>
             </form>
@@ -813,14 +1154,19 @@
     </div>
 </div>
 
-<!-- Delete Modal -->
+<!-- Delete Confirmation Modal -->
 <div id="deleteModal" class="modal">
     <div class="modal-content" style="max-width:400px">
-        <h3>🗑️ Delete Game</h3>
-        <p>Are you sure?</p>
-        <div style="display:flex; gap:1rem; margin-top:1.5rem">
-            <button id="confirmDeleteBtn" style="background:#ef4444; border:none; padding:12px 24px; border-radius:40px; color:white; cursor:pointer">Delete</button>
-            <button id="cancelDeleteBtn" style="background:var(--border); border:none; padding:12px 24px; border-radius:40px; cursor:pointer">Cancel</button>
+        <div style="text-align:center">
+            <div style="width:60px; height:60px; margin:0 auto 1rem; background:rgba(239,68,68,0.15); border-radius:50%; display:flex; align-items:center; justify-content:center">
+                <i class="fas fa-trash-alt text-red-500 text-2xl"></i>
+            </div>
+            <h3 style="font-size:1.3rem; margin-bottom:0.5rem">Delete Game?</h3>
+            <p style="color:var(--text-muted); margin-bottom:1.5rem">This action cannot be undone.</p>
+            <div style="display:flex; gap:1rem">
+                <button id="cancelDeleteBtn" style="flex:1; padding:12px; background:var(--bg-tertiary); border:none; border-radius:40px; cursor:pointer; color:var(--text-primary)">Cancel</button>
+                <button id="confirmDeleteBtn" style="flex:1; padding:12px; background:#ef4444; border:none; border-radius:40px; cursor:pointer; color:white">Delete</button>
+            </div>
         </div>
     </div>
 </div>
@@ -829,14 +1175,15 @@
 <div id="detailModal" class="modal">
     <div class="modal-content" style="max-width:700px; padding:0; overflow:hidden">
         <div style="position:relative">
-            <div id="detailHero" class="detail-hero" style="height:240px; background-size:cover; background-position:center"></div>
-            <span class="close-modal" style="position:absolute; top:20px; right:20px; cursor:pointer; background:rgba(0,0,0,0.5); width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%; color:white; font-size:1.5rem">&times;</span>
+            <div id="detailHero" class="detail-hero"></div>
+            <span class="close-modal" style="position:absolute; top:20px; right:20px; cursor:pointer; background:rgba(0,0,0,0.5); width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%; color:white; font-size:1.2rem">&times;</span>
         </div>
-        <div id="detailContent" class="detail-content" style="padding:1.5rem"></div>
+        <div id="detailContent" style="padding:1.5rem"></div>
     </div>
 </div>
 
 <script>
+    // Environment Variables
     window.SUPABASE_URL = 'https://inwjlxiqxtztjtrttqke.supabase.co';
     window.SUPABASE_KEY = 'sb_publishable_ntFp5P_qMnQKQSv3-MX9RA_dgOit_H1';
     window.RAWG_API_KEY = 'acb03a4a2dd04337b6b62eb78e325c59';
