@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>GameVault · Grid Library</title>
+    <title>GameVault · With Game Images & Add/Edit</title>
     <style>
         * {
             margin: 0;
@@ -18,20 +18,19 @@
             padding: 2rem 1.8rem;
         }
 
-        /* main container — grid-based layout with right-side emphasis */
         .app-wrapper {
             max-width: 1600px;
             margin: 0 auto;
         }
 
-        /* ========= HEADER / SIDEBAR-LIKE MENU ========= */
+        /* Header */
         .gamevault-header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
             flex-wrap: wrap;
             gap: 1rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
@@ -43,7 +42,6 @@
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            letter-spacing: -0.3px;
         }
 
         .logo-area p {
@@ -54,36 +52,45 @@
 
         .nav-menu {
             display: flex;
-            gap: 2rem;
+            gap: 0.5rem;
             background: rgba(18, 22, 35, 0.7);
             backdrop-filter: blur(8px);
-            padding: 0.5rem 1.2rem;
+            padding: 0.5rem;
             border-radius: 60px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .nav-menu span {
+        .nav-btn {
+            background: transparent;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
             font-weight: 500;
-            font-size: 0.95rem;
-            cursor: default;
-            transition: 0.2s;
+            font-size: 0.9rem;
             color: #b9c3db;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
         }
 
-        .nav-menu span:first-child {
+        .nav-btn.active {
+            background: #a87eff;
             color: white;
-            border-bottom: 2px solid #a87eff;
-            padding-bottom: 4px;
         }
 
-        /* ========= FILTER & SEARCH SECTION ========= */
+        .nav-btn:hover:not(.active) {
+            background: rgba(168, 126, 255, 0.3);
+            color: white;
+        }
+
+        /* Controls */
         .controls-panel {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             gap: 1.5rem;
-            margin-bottom: 2.2rem;
+            margin-bottom: 2rem;
             background: rgba(12, 16, 28, 0.6);
             backdrop-filter: blur(4px);
             padding: 1rem 1.6rem;
@@ -91,13 +98,8 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .search-box {
-            flex: 2;
-            min-width: 220px;
-        }
-
         .search-box input {
-            width: 100%;
+            width: 280px;
             background: #0f121f;
             border: 1px solid #282e3f;
             border-radius: 60px;
@@ -105,24 +107,16 @@
             font-size: 0.9rem;
             color: #f0f3ff;
             transition: all 0.2s;
-            font-family: inherit;
         }
 
         .search-box input:focus {
             outline: none;
             border-color: #a87eff;
-            box-shadow: 0 0 0 2px rgba(168, 126, 255, 0.2);
-        }
-
-        .search-box input::placeholder {
-            color: #5b677d;
         }
 
         .filter-group {
             display: flex;
-            flex-wrap: wrap;
             gap: 1rem;
-            align-items: center;
         }
 
         .filter-group select {
@@ -131,143 +125,67 @@
             padding: 0.6rem 1rem;
             border-radius: 2rem;
             color: #e2e8ff;
-            font-weight: 500;
-            font-size: 0.85rem;
             cursor: pointer;
-            font-family: inherit;
-            transition: 0.2s;
         }
 
-        .filter-group select:focus {
-            border-color: #a87eff;
-        }
-
-        /* ========= GAME GRID — RIGHT‑ALIGNED FLEX/GRID ========= */
-        /* "biar ke grid game ke kanan" → games will shift to right side,
-           but using a responsive grid that respects empty space on left
-           and pushes items more to the right when room exists.
-           We'll use a combination: main container with display: grid
-           and justify-content: end, or better: auto-fill + margin left auto?
-           To achieve "grid game ke kanan" like a right-aligned gallery,
-           we set the grid container to have content that leans right.
-           Classic method: flex wrap with justify-content: flex-end, but we need structured grid.
-           I will use CSS Grid with grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
-           then add margin-left: auto on the grid container? not perfect.
-           Actually to make games stick to the right side (like RTL gallery but LTR text),
-           we set parent text-align? no. Instead wrap grid in a flex container with justify-content: flex-end?
-           But we also want left space on big screens → games appear as a block on the right.
-        */
-        
-        /* Approach: outer wrapper as flex with justify-content: flex-end,
-           and inside grid behaves normally, but it will be placed on the right side.
-           However, we want search/filter above to remain full-width, only game grid right-aligned.
-        */
-        .games-section {
-            margin-top: 1rem;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .section-header h2 {
-            font-weight: 600;
-            font-size: 1.7rem;
-            background: linear-gradient(120deg, #f0f3ff, #c6b5ff);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .game-count {
-            font-size: 0.85rem;
-            background: #1e2338;
-            padding: 0.2rem 0.8rem;
-            border-radius: 40px;
-        }
-
-        /* RIGHT-ALIGNED GRID CONTAINER */
-        /* The requirement: "biar ke grid game ke kanan" – we shift the whole grid container to the right,
-           while keeping filters/search on top full-width. This creates modern asymmetric layout. */
+        /* Right-aligned grid */
         .right-aligned-grid {
             display: flex;
             justify-content: flex-end;
-            /* the grid container will be pushed right */
         }
 
         .game-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(290px, 320px));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 330px));
             gap: 1.8rem;
-            width: 100%;
-            max-width: 1400px;
-            transition: all 0.2s;
-        }
-
-        /* To force grid items to be right-aligned within available space, we set margin-left: auto on the grid?
-           But that makes grid container shrink to content width, causing items to stack left? No.
-           The clean method: .right-aligned-grid > .game-grid { margin-left: auto; margin-right: 0; }
-           This makes the grid container hug the right side, and inside grid items behave normally.
-           Exactly "ke kanan" – the whole library block sits on the right side, empty space on left.
-           This matches modern design where content floats right.
-        */
-        .right-aligned-grid .game-grid {
             margin-left: auto;
             margin-right: 0;
+            width: 100%;
         }
 
-        /* responsive: on smaller screens, remove margin-left to use full width */
         @media (max-width: 860px) {
             .right-aligned-grid .game-grid {
                 margin-left: 0;
-                width: 100%;
-            }
-            .right-aligned-grid {
-                justify-content: center;
             }
             body {
                 padding: 1.2rem;
             }
         }
 
-        /* Game Card Styling */
+        /* Game Card with Image */
         .game-card {
             background: #11141f;
-            border-radius: 1.8rem;
+            border-radius: 1.5rem;
             overflow: hidden;
             transition: all 0.25s ease;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(2px);
             box-shadow: 0 15px 30px -12px rgba(0, 0, 0, 0.5);
         }
 
         .game-card:hover {
             transform: translateY(-6px);
-            border-color: rgba(168, 126, 255, 0.4);
-            box-shadow: 0 22px 35px -14px rgba(0, 0, 0, 0.6);
+            border-color: rgba(168, 126, 255, 0.5);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #1a1f2e, #0d1020);
+            display: block;
         }
 
         .card-content {
-            padding: 1.4rem 1.3rem 1.5rem 1.3rem;
+            padding: 1.2rem 1.2rem 1.3rem;
         }
 
         .game-title {
-            font-size: 1.35rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            letter-spacing: -0.2px;
-            margin-bottom: 0.5rem;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-        }
-
-        .game-title h3 {
-            font-weight: 700;
-            font-size: 1.25rem;
+            align-items: center;
+            margin-bottom: 0.5rem;
         }
 
         .badge-difficulty {
@@ -275,15 +193,14 @@
             background: #1e293b;
             padding: 0.2rem 0.6rem;
             border-radius: 30px;
-            font-weight: 500;
         }
 
         .game-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.6rem;
-            margin: 0.8rem 0 0.9rem 0;
-            font-size: 0.8rem;
+            gap: 0.5rem;
+            margin: 0.6rem 0;
+            font-size: 0.75rem;
             color: #9aa5c1;
         }
 
@@ -298,34 +215,27 @@
             align-items: center;
             gap: 6px;
             flex-wrap: wrap;
-            margin: 10px 0 6px;
+            margin: 8px 0;
         }
 
         .stars {
             color: #f5b042;
-            letter-spacing: 2px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .rating-value {
-            font-weight: 600;
             background: #1f253b;
             padding: 2px 8px;
             border-radius: 20px;
-            font-size: 0.75rem;
-        }
-
-        .vote-count {
             font-size: 0.7rem;
-            color: #7f8bae;
         }
 
         .game-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 1.2rem;
-            padding-top: 0.8rem;
+            margin-top: 1rem;
+            padding-top: 0.7rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -336,29 +246,23 @@
 
         .action-buttons {
             display: flex;
-            gap: 0.8rem;
+            gap: 0.6rem;
         }
 
         .edit-btn, .delete-btn {
             background: none;
             border: none;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             padding: 0.3rem 0.8rem;
             border-radius: 40px;
             cursor: pointer;
             transition: 0.2s;
-            font-family: inherit;
         }
 
         .edit-btn {
             background: #2d2f42;
             color: #cddbff;
-        }
-
-        .edit-btn:hover {
-            background: #3d4070;
-            color: white;
         }
 
         .delete-btn {
@@ -371,40 +275,115 @@
             color: white;
         }
 
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #12162a;
+            border-radius: 2rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid rgba(168, 126, 255, 0.3);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .modal-content input, .modal-content select {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            background: #0a0d18;
+            border: 1px solid #2a2f42;
+            border-radius: 1rem;
+            color: white;
+            font-family: inherit;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .modal-buttons button {
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .save-btn {
+            background: #a87eff;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #2a2f42;
+            color: #ccc;
+        }
+
         .empty-message {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 3rem;
             background: #0c0f1a;
             border-radius: 2rem;
             color: #8f9bb3;
-            font-weight: 500;
         }
 
-        /* additional styling */
-        .genre-chip {
-            text-transform: capitalize;
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .add-game-btn {
+            background: #a87eff;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 <div class="app-wrapper">
-    <!-- Header & Menu (Dashboard, My Library, Add Game) -->
     <div class="gamevault-header">
         <div class="logo-area">
             <h1>🎮 GameVault</h1>
             <p>curate your journey</p>
         </div>
         <div class="nav-menu">
-            <span>Dashboard</span>
-            <span>My Library</span>
-            <span>Add Game</span>
+            <button class="nav-btn active" data-view="library">📚 My Library</button>
+            <button class="nav-btn" data-view="dashboard">📊 Dashboard</button>
         </div>
     </div>
 
-    <!-- Search & Filters exactly as design -->
     <div class="controls-panel">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 Search games" autocomplete="off">
+            <input type="text" id="searchInput" placeholder="🔍 Search games">
         </div>
         <div class="filter-group">
             <select id="platformFilter">
@@ -417,7 +396,6 @@
                 <option value="all">All Ratings</option>
                 <option value="4.5">4.5+ Stars</option>
                 <option value="4">4.0+ Stars</option>
-                <option value="3">3.0+ Stars</option>
             </select>
             <select id="statusFilter">
                 <option value="all">All Status</option>
@@ -428,26 +406,46 @@
         </div>
     </div>
 
-    <!-- Game Library Section + Right-aligned Grid (ke kanan) -->
     <div class="games-section">
         <div class="section-header">
             <h2>📚 Game Library</h2>
-            <div class="game-count" id="gameCounter">0 titles</div>
+            <button class="add-game-btn" id="openAddModalBtn">+ Add New Game</button>
         </div>
-
-        <!-- Right-aligned wrapper: the entire grid will be pushed to the right side -->
         <div class="right-aligned-grid">
-            <div class="game-grid" id="gameGridContainer">
-                <!-- dynamic game cards injected here -->
-            </div>
+            <div class="game-grid" id="gameGridContainer"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add/Edit -->
+<div id="gameModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitle">Add New Game</h3>
+        <input type="text" id="gameTitle" placeholder="Game Title" autocomplete="off">
+        <input type="number" id="gameRating" placeholder="Rating (1-5)" step="0.1" min="0" max="5">
+        <input type="text" id="gameDifficulty" placeholder="Difficulty (Easy/Medium/Hard/Expert)">
+        <input type="text" id="gameGenre" placeholder="Genre (MOBA/RPG/Action/etc)">
+        <select id="gamePlatform">
+            <option value="Mobile">Mobile</option>
+            <option value="PC">PC</option>
+            <option value="Console">Console</option>
+        </select>
+        <select id="gameStatus">
+            <option value="Backlog">Backlog</option>
+            <option value="Playing">Playing</option>
+            <option value="Completed">Completed</option>
+        </select>
+        <input type="text" id="gameImage" placeholder="Image URL (direct link) — leave blank for default">
+        <div class="modal-buttons">
+            <button class="cancel-btn" id="closeModalBtn">Cancel</button>
+            <button class="save-btn" id="saveGameBtn">Save Game</button>
         </div>
     </div>
 </div>
 
 <script>
-    // ---------- GAME DATA (extended from the screenshot + extra for demo) ----------
-    // include League of Legends: Wild Rift as baseline, plus more games to show grid on the right.
-    const gamesData = [
+    // Game data with IMAGES!
+    let gamesData = [
         {
             id: 1,
             title: "League of Legends: Wild Rift",
@@ -458,7 +456,8 @@
             lastUpdated: "1 day ago",
             platform: "Mobile",
             status: "Backlog",
-            ratingValue: 4.5
+            ratingValue: 4.5,
+            imageUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=200&fit=crop"
         },
         {
             id: 2,
@@ -470,7 +469,8 @@
             lastUpdated: "3 days ago",
             platform: "PC",
             status: "Playing",
-            ratingValue: 4.8
+            ratingValue: 4.8,
+            imageUrl: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&h=200&fit=crop"
         },
         {
             id: 3,
@@ -482,7 +482,8 @@
             lastUpdated: "5 days ago",
             platform: "Console",
             status: "Backlog",
-            ratingValue: 4.2
+            ratingValue: 4.2,
+            imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=200&fit=crop"
         },
         {
             id: 4,
@@ -494,7 +495,8 @@
             lastUpdated: "12 hours ago",
             platform: "Mobile",
             status: "Completed",
-            ratingValue: 4.9
+            ratingValue: 4.9,
+            imageUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=200&fit=crop"
         },
         {
             id: 5,
@@ -506,7 +508,8 @@
             lastUpdated: "2 days ago",
             platform: "Mobile",
             status: "Playing",
-            ratingValue: 4.3
+            ratingValue: 4.3,
+            imageUrl: "https://images.unsplash.com/photo-1542751110-97427bbecf20?w=400&h=200&fit=crop"
         },
         {
             id: 6,
@@ -518,7 +521,8 @@
             lastUpdated: "2 weeks ago",
             platform: "Console",
             status: "Backlog",
-            ratingValue: 4.9
+            ratingValue: 4.9,
+            imageUrl: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=400&h=200&fit=crop"
         },
         {
             id: 7,
@@ -530,161 +534,229 @@
             lastUpdated: "6 days ago",
             platform: "PC",
             status: "Playing",
-            ratingValue: 4.7
+            ratingValue: 4.7,
+            imageUrl: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=400&h=200&fit=crop"
         }
     ];
 
-    // Helper: render star display
+    let nextId = 8;
+    let currentEditId = null;
+
     function renderStars(rating) {
-        const fullStars = Math.floor(rating);
-        const halfStar = (rating % 1) >= 0.5;
         let starString = '';
-        for (let i = 0; i < fullStars; i++) starString += '★';
-        if (halfStar) starString += '½';
-        const emptyStars = 5 - Math.ceil(rating);
-        for (let i = 0; i < emptyStars; i++) starString += '☆';
+        for (let i = 0; i < Math.floor(rating); i++) starString += '★';
+        if (rating % 1 >= 0.5) starString += '½';
+        while (starString.length < 5) starString += '☆';
         return starString;
     }
 
-    // filter logic based on search, platform, rating threshold, status
+    function formatStarsCount(count) {
+        return count >= 1000 ? (count/1000).toFixed(1)+'k' : count;
+    }
+
     function filterGames() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-        const platformVal = document.getElementById('platformFilter').value;
-        const ratingFilterVal = document.getElementById('ratingFilter').value;
-        const statusVal = document.getElementById('statusFilter').value;
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const platform = document.getElementById('platformFilter').value;
+        const ratingFilter = document.getElementById('ratingFilter').value;
+        const status = document.getElementById('statusFilter').value;
 
         return gamesData.filter(game => {
-            // search match
             if (searchTerm && !game.title.toLowerCase().includes(searchTerm)) return false;
-            // platform match
-            if (platformVal !== 'all' && game.platform !== platformVal) return false;
-            // rating filter (minimum stars)
-            if (ratingFilterVal !== 'all') {
-                const minRating = parseFloat(ratingFilterVal);
-                if (game.ratingValue < minRating) return false;
-            }
-            // status match
-            if (statusVal !== 'all' && game.status !== statusVal) return false;
+            if (platform !== 'all' && game.platform !== platform) return false;
+            if (ratingFilter !== 'all' && game.ratingValue < parseFloat(ratingFilter)) return false;
+            if (status !== 'all' && game.status !== status) return false;
             return true;
         });
     }
 
-    // generate game cards HTML and inject into grid
     function renderGameGrid() {
         const filtered = filterGames();
-        const gridContainer = document.getElementById('gameGridContainer');
+        const container = document.getElementById('gameGridContainer');
+        const counter = document.getElementById('gameCounter');
+        if (!counter) {
+            const header = document.querySelector('.section-header');
+            if (!document.getElementById('gameCounter')) {
+                const span = document.createElement('span');
+                span.id = 'gameCounter';
+                span.className = 'game-count';
+                header.appendChild(span);
+            }
+        }
         const counterSpan = document.getElementById('gameCounter');
-        counterSpan.innerText = `${filtered.length} ${filtered.length === 1 ? 'title' : 'titles'}`;
+        if (counterSpan) counterSpan.innerText = `${filtered.length} titles`;
 
         if (filtered.length === 0) {
-            gridContainer.innerHTML = `<div class="empty-message" style="grid-column:1/-1; width:100%;">✨ No games match your filters. Try adjusting search or criteria ✨</div>`;
+            container.innerHTML = `<div class="empty-message">🎮 No games found. Click "Add New Game" to start!</div>`;
             return;
         }
 
-        // map each game to card
-        const cardsHtml = filtered.map(game => {
-            const starSymbols = renderStars(game.rating);
-            // format stars count with + if > 1000
-            const formattedStars = game.starsCount >= 1000 ? (game.starsCount/1000).toFixed(1)+'k' : game.starsCount;
-
-            return `
-                <div class="game-card" data-game-id="${game.id}">
-                    <div class="card-content">
-                        <div class="game-title">
-                            <h3>${escapeHtml(game.title)}</h3>
-                            <span class="badge-difficulty">${game.difficulty}</span>
-                        </div>
-                        <div class="game-meta">
-                            <span>🎮 ${game.platform}</span>
-                            <span>🎭 ${game.genre}</span>
-                            <span>📌 ${game.status}</span>
-                        </div>
-                        <div class="rating-row">
-                            <div class="stars">${starSymbols}</div>
-                            <div class="rating-value">${game.rating} out of 5</div>
-                            <div class="vote-count">⭐ ${formattedStars}+</div>
-                        </div>
-                        <div class="game-footer">
-                            <div class="last-updated">🕒 Updated: ${game.lastUpdated}</div>
-                            <div class="action-buttons">
-                                <button class="edit-btn" data-id="${game.id}">Edit</button>
-                                <button class="delete-btn" data-id="${game.id}">Delete</button>
-                            </div>
+        container.innerHTML = filtered.map(game => `
+            <div class="game-card">
+                <img class="game-image" src="${game.imageUrl || 'https://via.placeholder.com/400x200?text=Game+Thumbnail'}" 
+                     alt="${game.title}" onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
+                <div class="card-content">
+                    <div class="game-title">
+                        <h3>${escapeHtml(game.title)}</h3>
+                        <span class="badge-difficulty">${game.difficulty}</span>
+                    </div>
+                    <div class="game-meta">
+                        <span>🎮 ${game.platform}</span>
+                        <span>🎭 ${game.genre}</span>
+                        <span>📌 ${game.status}</span>
+                    </div>
+                    <div class="rating-row">
+                        <div class="stars">${renderStars(game.rating)}</div>
+                        <div class="rating-value">${game.rating} out of 5</div>
+                        <div class="vote-count">⭐ ${formatStarsCount(game.starsCount)}+</div>
+                    </div>
+                    <div class="game-footer">
+                        <div class="last-updated">🕒 Updated: ${game.lastUpdated}</div>
+                        <div class="action-buttons">
+                            <button class="edit-btn" data-id="${game.id}">✏️ Edit</button>
+                            <button class="delete-btn" data-id="${game.id}">🗑️ Delete</button>
                         </div>
                     </div>
                 </div>
-            `;
-        }).join('');
+            </div>
+        `).join('');
 
-        gridContainer.innerHTML = cardsHtml;
-
-        // attach event listeners for edit/delete dynamically
         document.querySelectorAll('.edit-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const gameId = parseInt(btn.getAttribute('data-id'));
-                const game = gamesData.find(g => g.id === gameId);
-                if (game) {
-                    const newTitle = prompt('Edit game title:', game.title);
-                    if (newTitle && newTitle.trim()) game.title = newTitle.trim();
-                    const newRating = prompt('Edit rating (1-5):', game.rating);
-                    if (newRating && !isNaN(parseFloat(newRating)) && parseFloat(newRating)>=0 && parseFloat(newRating)<=5) {
-                        game.rating = parseFloat(parseFloat(newRating).toFixed(1));
-                        game.ratingValue = game.rating;
-                    }
-                    renderGameGrid(); // re-render after edit
-                }
+                const id = parseInt(btn.dataset.id);
+                openEditModal(id);
             });
         });
 
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const gameId = parseInt(btn.getAttribute('data-id'));
-                const index = gamesData.findIndex(g => g.id === gameId);
-                if (index !== -1) {
-                    if (confirm(`Delete "${gamesData[index].title}" from library?`)) {
-                        gamesData.splice(index, 1);
-                        renderGameGrid();
-                    }
+                const id = parseInt(btn.dataset.id);
+                if (confirm('Delete this game?')) {
+                    gamesData = gamesData.filter(g => g.id !== id);
+                    renderGameGrid();
                 }
             });
         });
     }
 
-    // simple XSS protection
+    function openAddModal() {
+        currentEditId = null;
+        document.getElementById('modalTitle').innerText = 'Add New Game';
+        document.getElementById('gameTitle').value = '';
+        document.getElementById('gameRating').value = '';
+        document.getElementById('gameDifficulty').value = '';
+        document.getElementById('gameGenre').value = '';
+        document.getElementById('gamePlatform').value = 'Mobile';
+        document.getElementById('gameStatus').value = 'Backlog';
+        document.getElementById('gameImage').value = '';
+        document.getElementById('gameModal').classList.add('active');
+    }
+
+    function openEditModal(id) {
+        const game = gamesData.find(g => g.id === id);
+        if (!game) return;
+        currentEditId = id;
+        document.getElementById('modalTitle').innerText = 'Edit Game';
+        document.getElementById('gameTitle').value = game.title;
+        document.getElementById('gameRating').value = game.rating;
+        document.getElementById('gameDifficulty').value = game.difficulty;
+        document.getElementById('gameGenre').value = game.genre;
+        document.getElementById('gamePlatform').value = game.platform;
+        document.getElementById('gameStatus').value = game.status;
+        document.getElementById('gameImage').value = game.imageUrl || '';
+        document.getElementById('gameModal').classList.add('active');
+    }
+
+    function saveGame() {
+        const title = document.getElementById('gameTitle').value.trim();
+        const rating = parseFloat(document.getElementById('gameRating').value);
+        const difficulty = document.getElementById('gameDifficulty').value.trim();
+        const genre = document.getElementById('gameGenre').value.trim();
+        const platform = document.getElementById('gamePlatform').value;
+        const status = document.getElementById('gameStatus').value;
+        let imageUrl = document.getElementById('gameImage').value.trim();
+
+        if (!title) return alert('Game title required');
+        if (isNaN(rating) || rating < 0 || rating > 5) return alert('Rating must be 0-5');
+
+        if (currentEditId === null) {
+            // Add new
+            const newGame = {
+                id: nextId++,
+                title: title,
+                rating: rating,
+                ratingValue: rating,
+                starsCount: Math.floor(Math.random() * 5000) + 100,
+                difficulty: difficulty || 'Medium',
+                genre: genre || 'Adventure',
+                lastUpdated: 'Just now',
+                platform: platform,
+                status: status,
+                imageUrl: imageUrl || 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=200&fit=crop'
+            };
+            gamesData.push(newGame);
+        } else {
+            // Edit existing
+            const game = gamesData.find(g => g.id === currentEditId);
+            if (game) {
+                game.title = title;
+                game.rating = rating;
+                game.ratingValue = rating;
+                game.difficulty = difficulty || game.difficulty;
+                game.genre = genre || game.genre;
+                game.platform = platform;
+                game.status = status;
+                if (imageUrl) game.imageUrl = imageUrl;
+                game.lastUpdated = 'updated now';
+            }
+        }
+        closeModal();
+        renderGameGrid();
+    }
+
+    function closeModal() {
+        document.getElementById('gameModal').classList.remove('active');
+        currentEditId = null;
+    }
+
     function escapeHtml(str) {
         return str.replace(/[&<>]/g, function(m) {
             if (m === '&') return '&amp;';
             if (m === '<') return '&lt;';
             if (m === '>') return '&gt;';
             return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
         });
     }
 
-    // attach filter event listeners
-    function bindFilters() {
-        const searchInput = document.getElementById('searchInput');
-        const platformSelect = document.getElementById('platformFilter');
-        const ratingSelect = document.getElementById('ratingFilter');
-        const statusSelect = document.getElementById('statusFilter');
+    // Event listeners
+    document.getElementById('openAddModalBtn').addEventListener('click', openAddModal);
+    document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+    document.getElementById('saveGameBtn').addEventListener('click', saveGame);
+    document.getElementById('searchInput').addEventListener('input', () => renderGameGrid());
+    document.getElementById('platformFilter').addEventListener('change', () => renderGameGrid());
+    document.getElementById('ratingFilter').addEventListener('change', () => renderGameGrid());
+    document.getElementById('statusFilter').addEventListener('change', () => renderGameGrid());
 
-        const update = () => renderGameGrid();
-        searchInput.addEventListener('input', update);
-        platformSelect.addEventListener('change', update);
-        ratingSelect.addEventListener('change', update);
-        statusSelect.addEventListener('change', update);
-    }
+    // Simple dashboard toggle (just visual)
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            if (this.dataset.view === 'dashboard') {
+                alert('📊 Dashboard view: total games = ' + gamesData.length);
+            } else {
+                renderGameGrid();
+            }
+        });
+    });
 
-    // init
-    function init() {
-        bindFilters();
-        renderGameGrid();
-    }
+    // Add counter span
+    const headerDiv = document.querySelector('.section-header');
+    const counterSpan = document.createElement('span');
+    counterSpan.id = 'gameCounter';
+    counterSpan.className = 'game-count';
+    headerDiv.appendChild(counterSpan);
 
-    init();
+    renderGameGrid();
 </script>
 </body>
 </html>
