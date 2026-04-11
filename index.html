@@ -38,6 +38,8 @@
             --info: #3b82f6;
             --sidebar-bg: #1e1b2e;
             --shadow: 0 20px 35px -10px rgba(0,0,0,0.08);
+            --rank-bg-light: rgba(0,0,0,0.75);
+            --rank-text-light: white;
         }
 
         .dark-mode {
@@ -49,6 +51,8 @@
             --border: #334155;
             --sidebar-bg: #0f0f1a;
             --accent-light: #2d2a4e;
+            --rank-bg-light: rgba(0,0,0,0.8);
+            --rank-text-light: white;
         }
 
         body {
@@ -284,7 +288,7 @@
         /* Games Grid */
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.5rem;
         }
 
@@ -363,18 +367,24 @@
             transition: width 0.3s;
         }
 
-        /* Rank Badge (Online) */
+        /* Rank Badge (Online) - FIXED VISIBILITY */
         .rank-badge {
             position: absolute;
             bottom: 12px;
             right: 12px;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
             padding: 6px 12px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
             z-index: 2;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .rank-badge i {
+            margin-right: 4px;
+            color: #fbbf24;
         }
 
         .card-content { padding: 1rem; }
@@ -396,7 +406,7 @@
         .card-actions {
             display: flex;
             justify-content: flex-end;
-            gap: 12px;
+            gap: 8px;
             margin-top: 10px;
             padding-top: 10px;
             border-top: 1px solid var(--border);
@@ -409,8 +419,13 @@
             padding: 6px 12px;
             border-radius: 8px;
             transition: all 0.2s;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
         .card-actions button:hover { color: var(--accent); background: rgba(139, 92, 246, 0.1); }
+        .card-actions .delete-btn:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
 
         /* Modal */
         .modal {
@@ -614,16 +629,163 @@
             font-size: 0.85rem;
         }
 
+        /* ============================================
+           PREMIUM DETAIL MODAL STYLES
+           ============================================ */
+        .detail-container {
+            animation: fadeInUp 0.4s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .detail-hero-section {
+            position: relative;
+            margin: -2rem -2rem 1.5rem -2rem;
+            border-radius: 32px 32px 0 0;
+            overflow: hidden;
+        }
+        .detail-cover {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+        }
+        .detail-cover-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(to top, var(--bg-secondary), transparent);
+        }
+        .detail-title-section {
+            padding: 0 0.5rem;
+            margin-top: -40px;
+            position: relative;
+            z-index: 2;
+        }
+        .detail-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .detail-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .detail-stat-card {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+        }
+        .detail-stat-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+        .detail-stat-icon {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--accent), #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .detail-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .detail-stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 0.25rem;
+        }
+        .detail-section {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .detail-section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+        }
+        .detail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .detail-tag {
+            background: var(--card-bg);
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
+        }
+        .detail-notes {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+        .detail-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .detail-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-detail-edit {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            border: none;
+            color: white;
+        }
+        .btn-detail-edit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4); }
+        .btn-detail-delete {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+        .btn-detail-delete:hover { background: var(--danger); color: white; transform: translateY(-2px); }
+
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar { display: none; }
             .main-content { margin-left: 0; padding: 1rem; padding-bottom: 80px; }
             .bottom-nav { display: flex; }
             .stats-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
-            .games-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+            .games-grid { grid-template-columns: 1fr; gap: 1rem; }
             .library-layout { flex-direction: column; }
             .filter-sidebar { width: 100%; position: static; }
             .form-row { grid-template-columns: 1fr; }
+            .detail-title { font-size: 1.4rem; }
+            .detail-hero-section { margin: -1rem -1rem 1rem -1rem; }
+            .detail-cover { height: 180px; }
+            .detail-stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -741,7 +903,6 @@
     <div class="modal-content">
         <div class="modal-header"><h3 id="modalTitle">Add New Game</h3><span class="close-modal">&times;</span></div>
         
-        <!-- Game Type Toggle -->
         <div class="game-type-toggle">
             <div class="type-option active" data-type="offline">🎮 Offline Game</div>
             <div class="type-option" data-type="online">🌐 Online Game</div>
@@ -767,27 +928,12 @@
             </div>
             <div class="form-group"><label>Tags (comma)</label><input type="text" id="tags"></div>
             
-            <!-- OFFLINE FIELDS -->
             <div id="offlineFields" class="offline-fields">
-                <div class="form-group">
-                    <label>Progress (%)</label>
-                    <input type="number" id="progress" min="0" max="100" value="0">
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select id="offlineStatus">
-                        <option value="backlog">📚 Backlog</option>
-                        <option value="playing">🎮 Playing</option>
-                        <option value="completed">🏆 Completed</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Date Started</label>
-                    <input type="date" id="dateStarted">
-                </div>
+                <div class="form-group"><label>Progress (%)</label><input type="number" id="progress" min="0" max="100" value="0"></div>
+                <div class="form-group"><label>Status</label><select id="offlineStatus"><option value="backlog">📚 Backlog</option><option value="playing">🎮 Playing</option><option value="completed">🏆 Completed</option></select></div>
+                <div class="form-group"><label>Date Started</label><input type="date" id="dateStarted"></div>
             </div>
             
-            <!-- ONLINE FIELDS -->
             <div id="onlineFields" class="online-fields hidden">
                 <div class="form-group">
                     <label>Rank / Level</label>
@@ -806,32 +952,14 @@
                         <input type="text" id="customRank" placeholder="Custom rank...">
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group"><label>Total Matches</label><input type="number" id="totalMatches" min="0" value="0"></div>
-                    <div class="form-group"><label>Win Rate (%)</label><input type="number" id="winRate" min="0" max="100" value="0"></div>
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select id="onlineStatus">
-                        <option value="active">⚡ Active</option>
-                        <option value="onbreak">⏸️ On Break</option>
-                        <option value="retired">🏁 Retired</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Date Started (Account Created)</label>
-                    <input type="date" id="dateStartedOnline">
-                </div>
+                <div class="form-row"><div class="form-group"><label>Total Matches</label><input type="number" id="totalMatches" min="0" value="0"></div><div class="form-group"><label>Win Rate (%)</label><input type="number" id="winRate" min="0" max="100" value="0"></div></div>
+                <div class="form-group"><label>Status</label><select id="onlineStatus"><option value="active">⚡ Active</option><option value="onbreak">⏸️ On Break</option><option value="retired">🏁 Retired</option></select></div>
+                <div class="form-group"><label>Date Started (Account Created)</label><input type="date" id="dateStartedOnline"></div>
             </div>
             
-            <div class="form-row">
-                <div class="form-group"><label>Playtime (Hours)</label><input type="number" id="playtime" step="0.5" value="0"></div>
-                <div class="form-group"><label>Rating (1-5)</label><input type="number" id="rating" step="0.5" min="1" max="5" value="3"></div>
-            </div>
-            
+            <div class="form-row"><div class="form-group"><label>Playtime (Hours)</label><input type="number" id="playtime" step="0.5" value="0"></div><div class="form-group"><label>Rating (1-5)</label><input type="number" id="rating" step="0.5" min="1" max="5" value="3"></div></div>
             <div class="form-group"><label>Notes (Optional)</label><textarea id="notes" rows="2" placeholder="Your thoughts about this game..."></textarea></div>
             
-            <!-- Auto Date Info -->
             <div id="dateInfo" class="date-info hidden">
                 <p><i class="fas fa-calendar-plus"></i> <strong>Auto Date Management:</strong></p>
                 <p><i class="fas fa-play-circle"></i> <span id="dateStartedDisplay">Date started will be set when status changes to Playing/Active</span></p>
@@ -861,7 +989,7 @@
 
 <script>
     // ============================================
-    // GAME TRACKER - SMART DATE MANAGEMENT
+    // GAME TRACKER - PREMIUM VERSION
     // ============================================
 
     const SUPABASE_URL = 'https://inwjlxiqxtztjtrttqke.supabase.co';
@@ -875,7 +1003,6 @@
     let currentCoverUrl = null;
     let currentRawgId = null;
     let deleteId = null;
-    let currentGameType = 'offline';
 
     // Helper Functions
     function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
@@ -929,7 +1056,7 @@
         } catch (error) { console.error('Search error:', error); return []; }
     }
 
-    // Render Library
+    // Render Library with Delete Button
     function renderLibrary() {
         const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
         const gameTypeFilter = document.getElementById('filterGameType')?.value || '';
@@ -998,6 +1125,7 @@
                         <div class="card-actions">
                             <button class="view-detail" data-id="${game.id}"><i class="fas fa-info-circle"></i> Details</button>
                             <button class="edit-game" data-id="${game.id}"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="delete-game delete-btn" data-id="${game.id}"><i class="fas fa-trash-alt"></i> Delete</button>
                         </div>
                     </div>
                 </div>
@@ -1006,65 +1134,132 @@
         
         document.querySelectorAll('.view-detail').forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); showGameDetail(btn.dataset.id); }));
         document.querySelectorAll('.edit-game').forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); openEditModal(btn.dataset.id); }));
+        document.querySelectorAll('.delete-game').forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); deleteId = btn.dataset.id; document.getElementById('deleteModal').style.display = 'flex'; }));
     }
 
+    // Premium Show Game Detail
     function showGameDetail(id) {
         const game = gamesData.find(g => g.id == id);
         if (!game) return;
         
         const isOffline = game.category === 'offline';
         const dateAdded = game.created_at ? new Date(game.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Not set';
+        const coverImg = game.image_url || `https://placehold.co/800x400/1e1b2e/8b5cf6?text=${encodeURIComponent(game.title.substring(0,1))}`;
         
-        let specificStatsHtml = '';
+        // Build stats HTML
+        let statsHtml = `
+            <div class="detail-stat-card">
+                <div class="detail-stat-icon"><i class="fas fa-tag"></i></div>
+                <div class="detail-stat-label">Genre</div>
+                <div class="detail-stat-value">${escapeHtml(game.genre) || '—'}</div>
+            </div>
+            <div class="detail-stat-card">
+                <div class="detail-stat-icon"><i class="fas fa-desktop"></i></div>
+                <div class="detail-stat-label">Platform</div>
+                <div class="detail-stat-value">${escapeHtml(game.platform) || '—'}</div>
+            </div>
+            <div class="detail-stat-card">
+                <div class="detail-stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="detail-stat-label">Playtime</div>
+                <div class="detail-stat-value">${game.playtime || 0} hours</div>
+            </div>
+            <div class="detail-stat-card">
+                <div class="detail-stat-icon"><i class="fas fa-star"></i></div>
+                <div class="detail-stat-label">Rating</div>
+                <div class="detail-stat-value">${renderStars(game.rating || 0)}</div>
+            </div>
+        `;
+        
         if (isOffline) {
-            specificStatsHtml = `
-                <div class="detail-stat"><i class="fas fa-chart-line"></i><div class="detail-stat-label">Progress</div><div class="detail-stat-value">${game.progress || 0}%</div></div>
-                <div class="detail-stat"><i class="fas fa-flag-checkered"></i><div class="detail-stat-label">Status</div><div class="detail-stat-value">${game.status?.toUpperCase() || 'Backlog'}</div></div>
-                <div class="detail-stat"><i class="fas fa-calendar-alt"></i><div class="detail-stat-label">Date Started</div><div class="detail-stat-value">${formatDate(game.date_started)}</div></div>
-                ${game.date_completed ? `<div class="detail-stat"><i class="fas fa-calendar-check"></i><div class="detail-stat-label">Completed</div><div class="detail-stat-value">${formatDate(game.date_completed)}</div></div>` : ''}
+            statsHtml += `
+                <div class="detail-stat-card">
+                    <div class="detail-stat-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="detail-stat-label">Progress</div>
+                    <div class="detail-stat-value">${game.progress || 0}%</div>
+                </div>
+                <div class="detail-stat-card">
+                    <div class="detail-stat-icon"><i class="fas fa-flag-checkered"></i></div>
+                    <div class="detail-stat-label">Status</div>
+                    <div class="detail-stat-value">${game.status?.toUpperCase() || 'BACKLOG'}</div>
+                </div>
+                <div class="detail-stat-card">
+                    <div class="detail-stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <div class="detail-stat-label">Started</div>
+                    <div class="detail-stat-value">${formatDate(game.date_started)}</div>
+                </div>
+                ${game.date_completed ? `<div class="detail-stat-card"><div class="detail-stat-icon"><i class="fas fa-calendar-check"></i></div><div class="detail-stat-label">Completed</div><div class="detail-stat-value">${formatDate(game.date_completed)}</div></div>` : ''}
             `;
         } else {
-            specificStatsHtml = `
-                <div class="detail-stat"><i class="fas fa-trophy"></i><div class="detail-stat-label">Rank</div><div class="detail-stat-value">${getRankDisplay(game.rank_level, game.custom_rank)}</div></div>
-                <div class="detail-stat"><i class="fas fa-crosshairs"></i><div class="detail-stat-label">Matches</div><div class="detail-stat-value">${game.total_matches || 0}</div></div>
-                <div class="detail-stat"><i class="fas fa-chart-simple"></i><div class="detail-stat-label">Win Rate</div><div class="detail-stat-value">${game.win_rate || 0}%</div></div>
-                <div class="detail-stat"><i class="fas fa-flag-checkered"></i><div class="detail-stat-label">Status</div><div class="detail-stat-value">${game.status?.toUpperCase() || 'Active'}</div></div>
-                <div class="detail-stat"><i class="fas fa-calendar-alt"></i><div class="detail-stat-label">Account Created</div><div class="detail-stat-value">${formatDate(game.date_started)}</div></div>
+            statsHtml += `
+                <div class="detail-stat-card">
+                    <div class="detail-stat-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="detail-stat-label">Rank</div>
+                    <div class="detail-stat-value">${getRankDisplay(game.rank_level, game.custom_rank)}</div>
+                </div>
+                <div class="detail-stat-card">
+                    <div class="detail-stat-icon"><i class="fas fa-crosshairs"></i></div>
+                    <div class="detail-stat-label">Matches</div>
+                    <div class="detail-stat-value">${game.total_matches || 0}</div>
+                </div>
+                <div class="detail-stat-card">
+                    <div class="detail-stat-icon"><i class="fas fa-chart-simple"></i></div>
+                    <div class="detail-stat-label">Win Rate</div>
+                    <div class="detail-stat-value">${game.win_rate || 0}%</div>
+                </div>
+                <div class="detail-stat-card">
+                    <div class="detail-stat-icon"><i class="fas fa-flag-checkered"></i></div>
+                    <div class="detail-stat-label">Status</div>
+                    <div class="detail-stat-value">${game.status?.toUpperCase() || 'ACTIVE'}</div>
+                </div>
+                <div class="detail-stat-card">
+                    <div class="detail-stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <div class="detail-stat-label">Account Created</div>
+                    <div class="detail-stat-value">${formatDate(game.date_started)}</div>
+                </div>
             `;
         }
         
+        const tagsHtml = game.tags ? game.tags.split(',').map(t => `<span class="detail-tag">#${escapeHtml(t.trim())}</span>`).join('') : '<span class="detail-tag">No tags</span>';
+        
         const detailHtml = `
-            <div class="modal-header"><h3>🎮 Game Details</h3><span class="close-modal" onclick="document.getElementById('detailModal').style.display='none'">&times;</span></div>
-            <img class="detail-game-cover" src="${game.image_url || 'https://placehold.co/600x300/1e1b2e/8b5cf6?text=' + encodeURIComponent(game.title.substring(0,1))}" onerror="this.src='https://placehold.co/600x300/1e1b2e/8b5cf6?text=${encodeURIComponent(game.title.substring(0,2))}'" style="width:100%; height:200px; object-fit:cover; border-radius:20px; margin-bottom:1rem">
-            <h2 style="margin-bottom:0.5rem">${escapeHtml(game.title)}</h2>
-            <div class="rating-stars" style="margin-bottom:1rem">${renderStars(game.rating || 0)}</div>
-            <div class="detail-stats" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1rem; margin:1.5rem 0">
-                <div class="detail-stat" style="background:var(--bg-primary); padding:1rem; border-radius:20px; text-align:center">
-                    <i class="fas fa-tag" style="font-size:1.5rem; color:var(--accent)"></i>
-                    <div class="detail-stat-label" style="font-size:0.7rem; color:var(--text-secondary)">Genre</div>
-                    <div class="detail-stat-value" style="font-weight:700">${escapeHtml(game.genre) || 'Not specified'}</div>
+            <div class="detail-container">
+                <div class="detail-hero-section">
+                    <img class="detail-cover" src="${coverImg}" onerror="this.src='https://placehold.co/800x400/1e1b2e/8b5cf6?text=${encodeURIComponent(game.title.substring(0,2))}'">
+                    <div class="detail-cover-overlay"></div>
                 </div>
-                <div class="detail-stat" style="background:var(--bg-primary); padding:1rem; border-radius:20px; text-align:center">
-                    <i class="fas fa-desktop" style="font-size:1.5rem; color:var(--accent)"></i>
-                    <div class="detail-stat-label" style="font-size:0.7rem; color:var(--text-secondary)">Platform</div>
-                    <div class="detail-stat-value" style="font-weight:700">${escapeHtml(game.platform) || 'Not specified'}</div>
+                <div class="detail-title-section">
+                    <h2 class="detail-title">${escapeHtml(game.title)}</h2>
                 </div>
-                <div class="detail-stat" style="background:var(--bg-primary); padding:1rem; border-radius:20px; text-align:center">
-                    <i class="fas fa-clock" style="font-size:1.5rem; color:var(--accent)"></i>
-                    <div class="detail-stat-label" style="font-size:0.7rem; color:var(--text-secondary)">Playtime</div>
-                    <div class="detail-stat-value" style="font-weight:700">${game.playtime || 0}h</div>
+                
+                <div class="detail-stats-grid">
+                    ${statsHtml}
                 </div>
-                <div class="detail-stat" style="background:var(--bg-primary); padding:1rem; border-radius:20px; text-align:center">
-                    <i class="fas fa-calendar-plus" style="font-size:1.5rem; color:var(--accent)"></i>
-                    <div class="detail-stat-label" style="font-size:0.7rem; color:var(--text-secondary)">Added</div>
-                    <div class="detail-stat-value" style="font-weight:700">${dateAdded}</div>
+                
+                <div class="detail-section">
+                    <div class="detail-section-title"><i class="fas fa-tags"></i> Tags</div>
+                    <div class="detail-tags">${tagsHtml}</div>
                 </div>
-                ${specificStatsHtml}
-            </div>
-            ${game.notes ? `<div style="background:var(--bg-primary); padding:1rem; border-radius:20px; margin:1rem 0"><strong><i class="fas fa-pen"></i> Notes:</strong><br>${escapeHtml(game.notes)}</div>` : ''}
-            <div class="detail-actions" style="display:flex; gap:1rem; margin-top:1.5rem">
-                <button class="btn-edit" onclick="openEditModal('${game.id}'); document.getElementById('detailModal').style.display='none'" style="flex:1; padding:12px; background:var(--accent); border:none; border-radius:40px; color:white; cursor:pointer"><i class="fas fa-edit"></i> Edit Game</button>
-                <button class="btn-delete" onclick="deleteId='${game.id}'; document.getElementById('detailModal').style.display='none'; document.getElementById('deleteModal').style.display='flex'" style="flex:1; padding:12px; background:transparent; border:1px solid var(--danger); border-radius:40px; color:var(--danger); cursor:pointer"><i class="fas fa-trash-alt"></i> Delete Game</button>
+                
+                ${game.notes ? `
+                <div class="detail-section">
+                    <div class="detail-section-title"><i class="fas fa-pen"></i> Notes</div>
+                    <div class="detail-notes">${escapeHtml(game.notes)}</div>
+                </div>
+                ` : ''}
+                
+                <div class="detail-section">
+                    <div class="detail-section-title"><i class="fas fa-info-circle"></i> Additional Info</div>
+                    <div class="detail-notes">
+                        <p><strong>Added to library:</strong> ${dateAdded}</p>
+                        <p><strong>Last played:</strong> ${formatDate(game.last_played)}</p>
+                        ${game.date_completed ? `<p><strong>Completion date:</strong> ${formatDate(game.date_completed)}</p>` : ''}
+                    </div>
+                </div>
+                
+                <div class="detail-actions">
+                    <button class="btn-detail-edit" onclick="openEditModal('${game.id}'); document.getElementById('detailModal').style.display='none'"><i class="fas fa-edit"></i> Edit Game</button>
+                    <button class="btn-detail-delete" onclick="deleteId='${game.id}'; document.getElementById('detailModal').style.display='none'; document.getElementById('deleteModal').style.display='flex'"><i class="fas fa-trash-alt"></i> Delete Game</button>
+                </div>
             </div>
         `;
         
@@ -1161,35 +1356,16 @@
     // Smart Date Management
     function updateDatesBasedOnStatus(category, status, oldStatus, currentData) {
         const today = getTodayDate();
-        let updates = {};
+        let updates = { last_played: today };
         
         if (category === 'offline') {
-            // Offline: Set date_started when status changes to 'playing'
-            if (status === 'playing' && (!currentData.date_started || oldStatus !== 'playing')) {
-                updates.date_started = today;
-            }
-            // Offline: Set date_completed when status changes to 'completed'
-            if (status === 'completed' && oldStatus !== 'completed') {
-                updates.date_completed = today;
-            }
-            // Remove date_completed if status changes from completed to something else
-            if (status !== 'completed' && oldStatus === 'completed') {
-                updates.date_completed = null;
-            }
+            if (status === 'playing' && (!currentData.date_started || oldStatus !== 'playing')) updates.date_started = today;
+            if (status === 'completed' && oldStatus !== 'completed') updates.date_completed = today;
+            if (status !== 'completed' && oldStatus === 'completed') updates.date_completed = null;
         } else {
-            // Online: Set date_started when status changes to 'active' and not set
-            if (status === 'active' && !currentData.date_started) {
-                updates.date_started = today;
-            }
-            // Online: Set date_completed when status changes to 'retired'
-            if (status === 'retired' && oldStatus !== 'retired') {
-                updates.date_completed = today;
-            }
+            if (status === 'active' && !currentData.date_started) updates.date_started = today;
+            if (status === 'retired' && oldStatus !== 'retired') updates.date_completed = today;
         }
-        
-        // Always update last_played
-        updates.last_played = today;
-        
         return updates;
     }
 
@@ -1212,16 +1388,12 @@
         const now = new Date().toISOString();
         const category = document.getElementById('gameType')?.value || 'offline';
         
-        // Get old game data for date management
         let oldGame = null;
         if (id) oldGame = gamesData.find(g => g.id == id);
         
         let status = '';
-        if (category === 'offline') {
-            status = document.getElementById('offlineStatus')?.value;
-        } else {
-            status = document.getElementById('onlineStatus')?.value;
-        }
+        if (category === 'offline') status = document.getElementById('offlineStatus')?.value;
+        else status = document.getElementById('onlineStatus')?.value;
         
         const baseGame = {
             title: document.getElementById('title')?.value,
@@ -1240,23 +1412,15 @@
         
         if (!baseGame.title) { showNotification('Title is required!', 'error'); return; }
         
-        // Handle date_started from form input
         let dateStarted = null;
-        if (category === 'offline') {
-            dateStarted = document.getElementById('dateStarted')?.value || null;
-        } else {
-            dateStarted = document.getElementById('dateStartedOnline')?.value || null;
-        }
+        if (category === 'offline') dateStarted = document.getElementById('dateStarted')?.value || null;
+        else dateStarted = document.getElementById('dateStartedOnline')?.value || null;
         
         let game = { ...baseGame, date_started: dateStarted };
         
-        // Add category-specific fields
         if (category === 'offline') {
             game.progress = parseInt(document.getElementById('progress')?.value || 0);
-            game.rank_level = null;
-            game.custom_rank = null;
-            game.total_matches = null;
-            game.win_rate = null;
+            game.rank_level = null; game.custom_rank = null; game.total_matches = null; game.win_rate = null;
         } else {
             game.rank_level = document.getElementById('rankLevel')?.value;
             game.custom_rank = document.getElementById('customRank')?.value || null;
@@ -1265,14 +1429,11 @@
             game.progress = null;
         }
         
-        // Smart date management based on status change
         if (oldGame) {
             const dateUpdates = updateDatesBasedOnStatus(category, status, oldGame.status, oldGame);
             game = { ...game, ...dateUpdates };
         } else {
-            // New game: set last_played
             game.last_played = getTodayDate();
-            // If status is playing/active and no date_started, set today
             if ((category === 'offline' && status === 'playing' && !game.date_started) ||
                 (category === 'online' && status === 'active' && !game.date_started)) {
                 game.date_started = getTodayDate();
@@ -1315,7 +1476,6 @@
             document.getElementById('notes').value = game.notes || '';
             currentCoverUrl = game.image_url;
             currentRawgId = game.rawg_id;
-            
             if (currentCoverUrl) { document.getElementById('coverPreview').src = currentCoverUrl; document.getElementById('coverPreviewContainer').style.display = 'block'; }
             
             const isOffline = game.category === 'offline';
@@ -1342,7 +1502,6 @@
                 document.getElementById('offlineFields').classList.add('hidden');
             }
             
-            // Show date info
             document.getElementById('dateInfo').classList.remove('hidden');
             document.getElementById('dateStartedDisplay').innerHTML = game.date_started ? `Date started: ${formatDate(game.date_started)}` : 'Not set yet';
             document.getElementById('lastPlayedDisplay').innerHTML = game.last_played ? `Last played: ${formatDate(game.last_played)}` : 'Never played';
@@ -1461,7 +1620,7 @@
 
     // Initialization
     document.addEventListener('DOMContentLoaded', () => {
-        console.log('🚀 Game Tracker Smart Date Management Starting...');
+        console.log('🚀 Game Tracker Premium Starting...');
         setupGameSearch();
         setupDarkMode();
         setupGameTypeToggle();
