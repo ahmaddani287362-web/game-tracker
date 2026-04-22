@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>GameVault | Google Sheets Database</title>
-    
-    <meta name="description" content="Game tracker with Google Sheets database - FREE & PERMANENT">
-    <meta name="theme-color" content="#8b5cf6">
+    <title>GameVault | Game Tracker</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -28,7 +25,6 @@
             --accent-light: #ede9fe;
             --success: #10b981;
             --danger: #ef4444;
-            --warning: #f59e0b;
             --sidebar-bg: #1e1b2e;
             --shadow: 0 20px 35px -10px rgba(0,0,0,0.08);
         }
@@ -674,14 +670,14 @@
                 </aside>
 
                 <div class="games-container">
-                    <div id="gamesGrid" class="games-grid"><div class="empty-state"><i class="fas fa-gamepad" style="font-size:3rem;margin-bottom:1rem"></i><p>Loading games from Google Sheets...</p></div></div>
+                    <div id="gamesGrid" class="games-grid"><div class="empty-state"><i class="fas fa-gamepad" style="font-size:3rem;margin-bottom:1rem"></i><p>Loading games...</p></div></div>
                 </div>
             </div>
         </section>
 
         <footer class="footer">
             <div class="footer-content">
-                <div class="footer-section"><h4>🎮 GameVault</h4><p style="color:var(--text-secondary)">Powered by Google Sheets (FREE & PERMANENT)</p></div>
+                <div class="footer-section"><h4>🎮 GameVault</h4><p style="color:var(--text-secondary)">Powered by Google Sheets + Apps Script</p></div>
                 <div class="footer-section"><h4>Quick Links</h4><a href="#" data-tab="dashboard">📊 Dashboard</a><a href="#" data-tab="library">🎮 My Library</a></div>
             </div>
             <div class="copyright"><p>&copy; 2024 GameVault. Made with <i class="fas fa-heart" style="color:var(--accent)"></i> for gamers worldwide.</p></div>
@@ -773,16 +769,22 @@
 
 <script>
     // ============================================
-    // GAME TRACKER - GOOGLE SHEETS APPS SCRIPT
-    // 100% FREE & PERMANENT
+    // GAME TRACKER - GOOGLE APPS SCRIPT + CORS PROXY
+    // FULL CRUD KE GOOGLE SHEETS
     // ============================================
 
     const RAWG_API_KEY = 'acb03a4a2dd04337b6b62eb78e325c59';
     
     // ============================================
-    // GANTI DENGAN URL APPS SCRIPT ANDA!
+    // KONFIGURASI - GANTI DENGAN URL APPS SCRIPT ANDA
     // ============================================
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxQlm-AIJwiS1u5uK5G7N8Rgo53Pnfl22ZnsZ5dCiSpJfnt30P4ZVKOUtHLe41wQbwQ/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwJcLSSs0GzApLHZpf-CYiw4Y_IPzK-zr5Ct7mBQXhZEoS0iLlcnBx-8wPsiq4j49qQ/exec';
+    
+    // CORS Proxy (gratis, support POST/PUT/DELETE)
+    const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
+    // Alternatif proxy lain jika cors-anywhere bermasalah:
+    // const PROXY_URL = 'https://api.allorigins.win/raw?url=';
+    // const PROXY_URL = 'https://thingproxy.freeboard.io/fetch/';
     
     let gamesData = [];
     let genreChart, completionChart, ratingChart;
@@ -830,12 +832,15 @@
     }
 
     // ============================================
-    // GOOGLE SHEETS CRUD via Apps Script
+    // GOOGLE SHEETS CRUD via APPS SCRIPT + PROXY
     // ============================================
     
     async function fetchGames() {
         try {
-            const response = await fetch(APPS_SCRIPT_URL);
+            showNotification('Loading data from Google Sheets...', 'info');
+            // Untuk GET, kita bisa langsung pake proxy
+            const url = PROXY_URL + APPS_SCRIPT_URL;
+            const response = await fetch(url);
             const data = await response.json();
             gamesData = Array.isArray(data) ? data : [];
             console.log(`Loaded ${gamesData.length} games from Google Sheets`);
@@ -847,7 +852,7 @@
             }
         } catch (error) {
             console.error('Error fetching from Google Sheets:', error);
-            showNotification('Failed to load data. Make sure Apps Script is deployed!', 'error');
+            showNotification('Failed to load data from Google Sheets', 'error');
             gamesData = [];
             renderLibrary();
         }
@@ -881,20 +886,15 @@
         
         if (!game.title) { showNotification('Title is required!', 'error'); return; }
         
-        // Generate new ID if not exists
-        if (!id) {
-            const maxId = gamesData.length > 0 ? Math.max(...gamesData.map(g => parseInt(g.id) || 0)) : 0;
-            game.id = maxId + 1;
-            game.created_at = now;
-        } else {
-            game.id = parseInt(id);
-        }
+        // Generate ID jika baru
+        let newId = id ? parseInt(id) : Date.now();
+        game.id = newId;
         
         if (category === 'offline') {
             game.progress = parseInt(document.getElementById('progress')?.value || 0);
             game.date_started = document.getElementById('dateStarted')?.value || '';
-            game.date_completed = status === 'completed' ? now : '';
-            // Clear online fields
+            if (status === 'completed') game.date_completed = now;
+            else game.date_completed = '';
             game.rank_level = '';
             game.custom_rank = '';
             game.total_matches = 0;
@@ -905,23 +905,25 @@
             game.total_matches = parseInt(document.getElementById('totalMatches')?.value || 0);
             game.win_rate = parseInt(document.getElementById('winRate')?.value || 0);
             game.date_started = document.getElementById('dateStartedOnline')?.value || '';
-            game.date_completed = status === 'retired' ? now : '';
-            // Clear offline fields
+            if (status === 'retired') game.date_completed = now;
+            else game.date_completed = '';
             game.progress = 0;
         }
+        
+        if (!game.created_at) game.created_at = now;
         
         try {
             let response;
             if (id) {
-                // Update existing game
-                response = await fetch(`${APPS_SCRIPT_URL}?id=${id}`, {
+                // UPDATE
+                response = await fetch(PROXY_URL + APPS_SCRIPT_URL, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(game)
                 });
             } else {
-                // Add new game
-                response = await fetch(APPS_SCRIPT_URL, {
+                // CREATE
+                response = await fetch(PROXY_URL + APPS_SCRIPT_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(game)
@@ -932,13 +934,13 @@
             if (result.success) {
                 showNotification(result.message, 'success');
                 closeModal();
-                fetchGames();
+                fetchGames(); // Refresh data
             } else {
                 showNotification(result.error || 'Failed to save game', 'error');
             }
         } catch (error) {
             console.error('Error saving game:', error);
-            showNotification('Failed to save game', 'error');
+            showNotification('Failed to save game. Check CORS proxy.', 'error');
         }
     }
     
@@ -946,7 +948,7 @@
         if (!deleteId) return;
         
         try {
-            const response = await fetch(`${APPS_SCRIPT_URL}?id=${deleteId}`, {
+            const response = await fetch(`${PROXY_URL}${APPS_SCRIPT_URL}?id=${deleteId}`, {
                 method: 'DELETE'
             });
             const result = await response.json();
@@ -1383,7 +1385,8 @@
 
     // Initialization
     document.addEventListener('DOMContentLoaded', () => {
-        console.log('🚀 Game Tracker with Google Sheets Starting...');
+        console.log('🚀 Game Tracker with Google Apps Script + CORS Proxy Starting...');
+        
         setupGameSearch();
         setupDarkMode();
         setupGameTypeToggle();
@@ -1430,7 +1433,7 @@
         document.getElementById('filterStatus').addEventListener('change', renderLibrary);
         
         fetchGames();
-        console.log('✅ App Ready - Connected to Google Sheets!');
+        console.log('✅ App Ready - Connected to Google Sheets via Apps Script + Proxy!');
     });
 </script>
 </body>
