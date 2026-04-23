@@ -14,23 +14,40 @@ export default async function handler(req, res) {
   
   try {
     let url = APPS_SCRIPT_URL;
-    let options = { method: req.method };
+    let options = {
+      method: req.method,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    };
     
-    // Untuk DELETE, tambahkan parameter id
+    // Untuk DELETE, tambahkan parameter id ke URL
     if (req.method === 'DELETE') {
       const { id } = req.query;
       url = `${APPS_SCRIPT_URL}?id=${id}`;
+      options.body = undefined;
     }
     
     // Untuk POST atau PUT, kirim body
-    if (req.method === 'POST' || req.method === 'PUT') {
-      options.headers = { 'Content-Type': 'application/json' };
+    if (req.method === 'POST') {
       options.body = JSON.stringify(req.body);
     }
     
-    // Untuk GET, langsung fetch
+    if (req.method === 'PUT') {
+      options.body = JSON.stringify(req.body);
+    }
+    
+    // Untuk GET, tidak perlu body
+    if (req.method === 'GET') {
+      options.body = undefined;
+    }
+    
+    console.log(`Proxying ${req.method} request to: ${url}`);
+    
     const response = await fetch(url, options);
     const data = await response.json();
+    
+    console.log(`Response status: ${response.status}`);
     
     return res.status(200).json(data);
     
