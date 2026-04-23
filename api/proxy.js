@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
   
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwJcLSSs0GzApLHZpf-CYiw4Y_IPzK-zr5Ct7mBQXhZEoS0iLlcnBx-8wPsiq4j49qQ/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxJPjxi3ek4YrJZ0WKSQAkfK47JkWIuqeupx2fgpso1oTbKdFC9gZlCdi6OLPNssv3f/exec';
   
   try {
     let url = APPS_SCRIPT_URL;
